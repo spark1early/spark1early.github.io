@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Results Monday — First Principles of Health | Spark1Early</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --accent: #e8ff00;
+    --text: #f0f0f0;
+    --muted: #888888;
+    --border: #222222;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.8;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.25rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    background: rgba(10,10,10,0.95);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+
+  .nav-back {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .nav-back:hover { color: var(--accent); }
+
+  .article-wrap {
+    max-width: 740px;
+    margin: 0 auto;
+    padding: 7rem 2rem 6rem;
+  }
+
+  .article-meta {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .article-category {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .article-category::before {
+    content: '';
+    display: block;
+    width: 2rem; height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--mono);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.25rem;
+    letter-spacing: -0.02em;
+  }
+
+  .article-subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+  }
+
+  .article-date {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  .credit-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 3rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  .credit-box strong { color: var(--text); font-weight: 500; }
+  .credit-box a { color: var(--accent); text-decoration: none; }
+  .credit-box a:hover { text-decoration: underline; }
+
+  .disclaimer {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 1rem 1.25rem;
+    margin-bottom: 3rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  h2 {
+    font-family: var(--mono);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 3rem 0 1rem;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-family: var(--mono);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 2rem 0 0.75rem;
+    color: var(--accent);
+  }
+
+  p {
+    font-size: 1rem;
+    color: #cccccc;
+    margin-bottom: 1.25rem;
+    line-height: 1.9;
+  }
+
+  p strong { color: var(--text); font-weight: 500; }
+
+  ul {
+    margin: 0.75rem 0 1.5rem 0;
+    padding-left: 0;
+    list-style: none;
+  }
+
+  ul li {
+    font-size: 0.95rem;
+    color: #cccccc;
+    padding: 0.4rem 0 0.4rem 1.5rem;
+    position: relative;
+    line-height: 1.8;
+  }
+
+  ul li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-family: var(--mono);
+  }
+
+  .pull-quote {
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.5rem;
+    margin: 2.5rem 0;
+    font-family: var(--mono);
+    font-size: 1rem;
+    color: var(--text);
+    line-height: 1.7;
+    background: var(--surface);
+  }
+
+  .section-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 3rem 0;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .back-link {
+    display: inline-block;
+    margin-top: 3rem;
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.2s;
+  }
+
+  .back-link:hover { color: var(--accent); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.06em;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SPARK1EARLY</a>
+  <a href="../index.html#articles" class="nav-back">← Back to Articles</a>
+</nav>
+
+<div class="article-wrap">
+
+  <div class="article-meta">
+    <div class="article-category">Health Results Monday — Session Notes</div>
+    <h1>First Principles of Health:<br>What's Actually Making You Sick</h1>
+    <p class="article-subtitle">
+      A breakdown of the root causes of chronic disease — inflammation, nutrient deficiency,
+      and the toxic inputs most people consume daily without knowing it.
+    </p>
+    <div class="article-date">April 6, 2026 &nbsp;·&nbsp; Session Article</div>
+  </div>
+
+  <div class="credit-box">
+    <strong>Source credit:</strong> This article is based on content from the
+    <strong>Health Results Monday</strong> session featuring <strong>Heru Ofori Atta</strong>,
+    published on the YouTube channel <strong>Know the Ledger</strong>.
+    All insights and research referenced below originate from that session.
+    <br><br>
+    This is not a paid promotion or sponsored content. No affiliate relationships exist.
+    I'm sharing this because I found it useful — go watch the original for the full context.
+  </div>
+
+  <div class="disclaimer">
+    <strong>Note:</strong> This article is for informational and educational purposes only.
+    Nothing here is medical advice. Always consult a qualified healthcare professional
+    before changing your diet, supplements, or medications.
+  </div>
+
+  <p>
+    Most approaches to health start with the symptom. High blood pressure? Here's a pill.
+    High cholesterol? Here's another one. The problem with this model is that it treats
+    the output without touching the input — and the inputs are what's killing people slowly.
+  </p>
+
+  <p>
+    Heru Ofori Atta calls this a <strong>first principles approach to health</strong>:
+    strip everything back to what an organism actually needs, identify what's blocking it,
+    and solve the problem at the root. It's the same logic I use in AI consulting —
+    don't patch symptoms, fix the system.
+  </p>
+
+  <div class="pull-quote">
+    "The health of any living organism boils down to two things: removing toxic inputs and providing enough nutritive inputs."
+  </div>
+
+  <h2>The Two Pillars</h2>
+
+  <p>
+    Everything in the session traces back to two fundamentals:
+  </p>
+
+  <ul>
+    <li><strong>Remove toxic inputs</strong> — eliminate the substances causing harm and inflammation</li>
+    <li><strong>Provide nutritive inputs</strong> — give the body the vitamins, minerals, and fuel it needs to heal itself</li>
+  </ul>
+
+  <p>
+    Most chronic diseases — heart disease, diabetes, hypertension, even Alzheimer's —
+    are described as <strong>"itis" diseases</strong>. That suffix means inflammation.
+    They're not separate conditions. They're the same fire burning in different rooms.
+  </p>
+
+  <hr class="section-divider">
+
+  <h2>What's Toxic</h2>
+
+  <h3>Sugar and Refined Carbohydrates</h3>
+  <p>
+    Called the primary toxic input. White flour, white rice, pasta, crackers, processed snacks —
+    these convert to glucose rapidly and trigger constant insulin release.
+    Over time, this causes <strong>insulin resistance</strong>: the body's ability to move
+    sugar out of the blood breaks down, and that sugar stays in the bloodstream where it
+    corrodes soft tissue and arterial walls like acid.
+  </p>
+  <p>
+    The session compares it to sugar rotting tooth enamel — except it's happening to your
+    organs and blood vessels silently, over years.
+  </p>
+
+  <h3>Vegetable Seed Oils</h3>
+  <p>
+    Canola oil and similar seed oils were originally manufactured for industrial machines —
+    not human consumption. They contain inflammatory fatty acids that trigger the same
+    "itis" cascade as sugar. The recommendation: replace them with
+    <strong>unrefined virgin coconut oil</strong> or <strong>pure olive oil</strong>.
+  </p>
+
+  <h3>Heavy Metal Toxicity</h3>
+  <p>
+    Most people are carrying heavy metals they don't know about. Common sources:
+  </p>
+  <ul>
+    <li>Aluminum — from cooking pots, pans, and certain vaccines</li>
+    <li>Arsenic — found in commercial white and brown rice across most grocery store brands</li>
+    <li>Mercury — from large fish like tuna and mackerel</li>
+    <li>Lead — from old water pipes</li>
+  </ul>
+  <p>
+    The reason this matters beyond the obvious toxicity: pathogens like viruses, bacteria,
+    and parasites <strong>hide behind heavy metals</strong>. They use them as a shield
+    against the immune system and against medicinal treatments. You can't clear the
+    infection until you clear the metals first.
+  </p>
+
+  <h3>Pharmaceutical Medications as Toxic Inputs</h3>
+  <p>
+    This is the most controversial part of the session — and the most documented.
+    Common blood pressure medications like Lisinopril and Losartan list side effects
+    including acute kidney failure, erectile dysfunction, and hyperglycemia.
+    Statin drugs used to lower cholesterol deplete the brain of cholesterol it needs
+    to function — linked to cognitive decline, brain fog, and Alzheimer's-like symptoms.
+  </p>
+  <p>
+    The session cites cases where patients who stopped statins under a specific protocol
+    showed significant memory improvement within two weeks. The point isn't anti-medicine —
+    it's that managing a symptom while creating new damage isn't healing.
+  </p>
+
+  <hr class="section-divider">
+
+  <h2>What's Nutritive</h2>
+
+  <h3>Vitamin D</h3>
+  <p>
+    Described as the single most important nutrient for the immune system.
+    Most people are severely deficient — especially during winter months and for those
+    with darker skin, who need significantly more sun exposure to produce equivalent amounts.
+    The session recommends supplementing well above the standard 2,000 IU daily suggestion,
+    and emphasizes taking <strong>Vitamin K2 alongside D3</strong> — K2 moves excess calcium
+    out of the blood and into bones, preventing kidney stones and arterial calcification.
+  </p>
+
+  <h3>Magnesium, Zinc, and Selenium</h3>
+  <p>
+    These three minerals are essential for immune function and are consistently depleted
+    in industrialized food due to factory farming and topsoil depletion.
+    Magnesium specifically works with Vitamin D to regulate blood pressure.
+  </p>
+
+  <h3>Anti-Inflammatory Herbs</h3>
+  <ul>
+    <li><strong>Olive leaf extract</strong> — described as one of the most powerful anti-inflammatory plants available. Claimed to lower blood pressure as effectively as ACE inhibitors without the side effects.</li>
+    <li><strong>Ethiopian black seed oil</strong> — high in thymoquinone, a potent medicinal compound. Recommended as a daily anti-inflammatory.</li>
+    <li><strong>Turmeric</strong> — well-documented anti-inflammatory, recommended alongside other protocols.</li>
+    <li><strong>Cilantro (Chinese parsley)</strong> — the primary herb for heavy metal chelation. Binds to metals so the body can eliminate them through urine. Works best combined with moringa.</li>
+    <li><strong>Moringa</strong> — nutrient-dense, paired with cilantro for cleansing protocols.</li>
+    <li><strong>Vitex (Chasteberry)</strong> — specifically for women. Helps the body produce natural progesterone to balance estrogen dominance caused by soy, flaxseed, and factory-raised animal products.</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <h2>Insulin Resistance and Chronic Disease</h2>
+
+  <p>
+    The session frames insulin as a delivery system — like a truck moving glucose from
+    the blood into cells for energy. Years of sugar and refined carb consumption wear
+    that system down. The trucks stop working efficiently. Sugar accumulates in the blood.
+    And that excess sugar becomes inflammatory, feeding disease across multiple systems.
+  </p>
+
+  <p>
+    The diseases that result aren't separate problems — they're the same underlying
+    metabolic disorder expressing itself differently depending on where in the body
+    the inflammation concentrates:
+  </p>
+
+  <ul>
+    <li>High blood pressure — inflammation in arterial walls</li>
+    <li>Type 2 diabetes — systemic insulin resistance</li>
+    <li>Alzheimer's — called "Type 3 Diabetes" in the session; sugar-caused inflammation in the brain</li>
+    <li>Heart disease — arterial inflammation from sugar and seed oils</li>
+    <li>Cancer — cellular inflammation feeding parasites</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <h2>Intermittent Fasting — The Free Protocol</h2>
+
+  <p>
+    The session refers to intermittent fasting as a "cheat code" because it costs nothing
+    and addresses the root cause directly. The basic principle: restrict eating to a
+    specific window each day (6-8 hours) and fast for the rest.
+  </p>
+
+  <p>
+    After roughly 12-14 hours without food, the body transitions from storing fat
+    to burning it — running on ketones instead of glucose. This state:
+  </p>
+
+  <ul>
+    <li>Reduces chronic inflammation</li>
+    <li>Reverses insulin resistance over time</li>
+    <li>Triggers autophagy — cellular cleanup and immune renewal</li>
+    <li>Clears brain fog by switching fuel sources</li>
+    <li>Produces weight loss without additional exercise</li>
+  </ul>
+
+  <p>
+    The recommended starting point is an <strong>18:6 protocol</strong> — 18 hours fasting,
+    6 hours eating. A noon to 6pm window is suggested as a practical starting point.
+    The session notes a case where someone lost 80 pounds in three months using a
+    4-hour eating window.
+  </p>
+
+  <hr class="section-divider">
+
+  <h2>The Economic Angle</h2>
+
+  <p>
+    What made this session stand out beyond the health content was the economic vision
+    embedded in it. The discussion extended toward building a <strong>sovereign food economy</strong>
+    — connecting Black farmers directly to retail outlets and restaurants, cutting out
+    the intermediaries that both reduce farmer income and reduce food quality.
+  </p>
+
+  <p>
+    The argument is that physical health and economic self-reliance are the same project.
+    You can't have one without the other. That's a conversation worth its own session.
+  </p>
+
+  <hr class="section-divider">
+
+  <h2>Key Takeaways</h2>
+
+  <ul>
+    <li>Chronic inflammation is the root of most major diseases — not the disease itself</li>
+    <li>Sugar and seed oils are the primary toxic inputs driving that inflammation</li>
+    <li>Heavy metals act as a shield for pathogens — clear the metals, expose the infection</li>
+    <li>Vitamin D, magnesium, zinc, and selenium are the most commonly deficient immune nutrients</li>
+    <li>Olive leaf extract and cilantro are the flagship herbs for inflammation and detox</li>
+    <li>Intermittent fasting is the free, accessible protocol that addresses insulin resistance directly</li>
+    <li>Common medications often manage symptoms while creating new damage</li>
+  </ul>
+
+  <div class="pull-quote">
+    This isn't anti-medicine. It's pro-root-cause. The goal is to not need the medicine.
+  </div>
+
+  <div class="tag-row">
+    <span class="tag">Health</span>
+    <span class="tag">Nutrition</span>
+    <span class="tag">Inflammation</span>
+    <span class="tag">Intermittent Fasting</span>
+    <span class="tag">First Principles</span>
+    <span class="tag">Session Notes</span>
+    <span class="tag">Know the Ledger</span>
+  </div>
+
+  <a href="../index.html#articles" class="back-link">← Back to all articles</a>
+
+</div>
+
+<footer>
+  © 2026 Spark1Early — Boston, MA &nbsp;·&nbsp; #humanmusic &nbsp;·&nbsp; #aiworkflow
+</footer>
+
+</body>
+</html>
