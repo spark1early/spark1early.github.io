@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How I Organize AI Sessions to Stop Losing Context | Spark1Early</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #1a1a1a;
+    --accent: #e8ff00;
+    --text: #f0f0f0;
+    --muted: #888888;
+    --border: #222222;
+    --mono: 'Space Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; line-height: 1.8; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); letter-spacing: 0.1em; text-decoration: none; }
+  .nav-back { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+  .nav-back:hover { color: var(--accent); }
+  .article-wrap { max-width: 740px; margin: 0 auto; padding: 7rem 2rem 6rem; }
+  .article-meta { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+  .article-category { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+  .article-category::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--accent); }
+  h1 { font-family: var(--mono); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+  .article-subtitle { font-size: 1.1rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; }
+  .article-date { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
+  .context-box { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 1.25rem 1.5rem; margin-bottom: 3rem; font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+  .context-box strong { color: var(--text); font-weight: 500; }
+  h2 { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; margin: 3rem 0 1rem; color: var(--text); line-height: 1.2; }
+  h3 { font-family: var(--mono); font-size: 1rem; font-weight: 700; margin: 2rem 0 0.75rem; color: var(--accent); }
+  p { font-size: 1rem; color: #cccccc; margin-bottom: 1.25rem; line-height: 1.9; }
+  p strong { color: var(--text); font-weight: 500; }
+  ul { margin: 0.75rem 0 1.5rem 0; padding-left: 0; list-style: none; }
+  ul li { font-size: 0.95rem; color: #cccccc; padding: 0.4rem 0 0.4rem 1.5rem; position: relative; line-height: 1.8; }
+  ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); }
+  .pull-quote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2.5rem 0; font-family: var(--mono); font-size: 1rem; color: var(--text); line-height: 1.7; background: var(--surface); }
+  .code-block { background: #0d1117; border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; font-family: var(--mono); font-size: 0.82rem; color: var(--accent); line-height: 1.9; white-space: pre-wrap; }
+  .file-card { background: var(--surface); border: 1px solid var(--border); padding: 1.25rem 1.5rem; margin-bottom: 0.75rem; }
+  .file-card h4 { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); margin-bottom: 0.4rem; }
+  .file-card p { font-size: 0.85rem; color: var(--muted); margin-bottom: 0; }
+  table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.88rem; }
+  th { font-family: var(--mono); font-size: 0.7rem; color: #000; background: var(--accent); padding: 0.6rem 0.75rem; text-align: left; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); color: #cccccc; vertical-align: top; line-height: 1.7; }
+  tr:nth-child(even) td { background: var(--surface); }
+  .section-divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .tag { font-family: var(--mono); font-size: 0.65rem; padding: 0.35rem 0.75rem; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .back-link { display: inline-block; margin-top: 3rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+  .back-link:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-logo">SPARK1EARLY</a>
+  <a href="../index.html#articles" class="nav-back">← Back to Articles</a>
+</nav>
+
+<div class="article-wrap">
+  <div class="article-meta">
+    <div class="article-category">AI Workflow — From the Lab</div>
+    <h1>How I Organize AI Sessions<br>to Stop Losing Context</h1>
+    <p class="article-subtitle">
+      I run eight income streams with two jobs and one day off a week.
+      AI is how I make it work — but only once I figured out how to
+      stop wasting it. Here's the folder system and session strategy
+      that changed everything.
+    </p>
+    <div class="article-date">April 11, 2026 &nbsp;·&nbsp; AI Workflow Series</div>
+  </div>
+
+  <div class="context-box">
+    <strong>Where this comes from:</strong> I'm a music producer, graphic designer, AI consultant, and indie builder running three YouTube channels, a DeFi position, two stealth projects, and a consulting practice — while working two day jobs. Every minute of focused time matters. This is what I actually use. Not theory.
+  </div>
+
+  <p>
+    The biggest mistake people make with AI tools is treating every session like a blank slate
+    and then spending the first 15 minutes re-explaining who they are and what they're working on.
+    That's not just annoying — it's expensive. Every word the AI rereads costs tokens,
+    and tokens are your budget.
+  </p>
+
+  <p>
+    I learned this the hard way after hitting usage limits in the middle of builds,
+    losing context mid-session, and watching the quality of responses degrade as conversations got longer.
+    The fix wasn't a better prompt. <strong>It was a folder system.</strong>
+  </p>
+
+  <div class="pull-quote">
+    "Instead of pasting a long recap at the start of every session, I paste one file. That's it."
+  </div>
+
+  <h2>The Problem with Long Conversations</h2>
+
+  <p>
+    Every time you send a message, the AI rereads the entire conversation from the beginning.
+    Message 1 might cost 500 tokens. Message 30 in the same conversation could cost 15,000 —
+    because it's reprocessing everything that came before it.
+    Add connected tools, system prompts, and file uploads, and you can burn through
+    your session budget before you've done any real work.
+  </p>
+
+  <p>
+    The solution is what I call <strong>clean context</strong> — starting each session
+    with exactly the information needed for that task, nothing more.
+    That means having your project information pre-organized in reference files
+    you can paste in one shot.
+  </p>
+
+  <hr class="section-divider">
+
+  <h2>The Folder Structure</h2>
+
+  <p>
+    I keep one master folder called <code>spark1early-projects</code> with a subfolder
+    for each area of work. Inside each folder is one reference file — a plain text
+    document with everything the AI needs to know to pick up where we left off.
+  </p>
+
+  <div class="code-block">spark1early-projects/
+├── README.md                 ← master index, use for full planning sessions
+├── website/                  ← site files + articles
+├── project-static/
+│   └── BRIEF.md              ← concept, features, legal checklist
+├── project-signal/
+│   └── BRIEF.md              ← roadmap, status
+├── trading-system/
+│   └── SYSTEM.md             ← watchlist, rules, wallet addresses
+├── content-calendar/
+│   └── CALENDAR.md           ← post copy, philosophy, schedule
+├── consulting/
+│   └── CLIENTS.md            ← prospects, intake process
+└── master-plan/
+    └── MASTER_PLAN_SUMMARY.md ← 8 streams, schedule, accounts</div>
+
+  <h2>How to Use It</h2>
+
+  <p>
+    The key is matching the file to the session. Don't paste everything —
+    paste only what's relevant to what you're about to do.
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>What you're working on</th><th>File to paste</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Building a feature or product</td><td>That project's BRIEF.md</td></tr>
+      <tr><td>Trading system / DeFi</td><td>trading-system/SYSTEM.md</td></tr>
+      <tr><td>Social media / content</td><td>content-calendar/CALENDAR.md</td></tr>
+      <tr><td>Client prep or consulting</td><td>consulting/CLIENTS.md</td></tr>
+      <tr><td>Full Saturday planning session</td><td>README.md only</td></tr>
+      <tr><td>Website updates</td><td>Just mention the URL — no file needed</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    The README is your master document. On a full planning session — like my Saturday power day —
+    I paste that one file and the AI has everything it needs: all active projects,
+    key links, account info, my work schedule, and what's pending.
+    One paste instead of twenty minutes of recap.
+  </p>
+
+  <hr class="section-divider">
+
+  <h2>What Goes in Each Reference File</h2>
+
+  <h3>BRIEF.md — for any project you're building</h3>
+  <p>Keep it tight. Just what the AI needs to continue the work:</p>
+  <ul>
+    <li>Project name and current version or stage</li>
+    <li>Core concept in 2 sentences</li>
+    <li>What's already been built or decided</li>
+    <li>What you're working on in this session</li>
+    <li>Any blockers, dependencies, or open questions</li>
+    <li>Status — what's pending, what's next</li>
+  </ul>
+
+  <h3>SYSTEM.md — for technical or automated setups</h3>
+  <ul>
+    <li>Tool names, versions, and where they're installed</li>
+    <li>Credentials and keys stored locally — never paste these into public chats</li>
+    <li>The rules your system follows — entry conditions, exit conditions, limits</li>
+    <li>What's currently active and its status</li>
+    <li>The commands or scripts needed to start everything up</li>
+  </ul>
+
+  <h3>CALENDAR.md — for content and social media</h3>
+  <ul>
+    <li>Your posting philosophy in one paragraph — this keeps the AI consistent with your voice</li>
+    <li>Upcoming posts with the exact caption copy ready to go</li>
+    <li>Platform handles, hashtags, and tone notes</li>
+    <li>What's scheduled, what's drafted, what's still pending</li>
+  </ul>
+
+  <h3>README.md — the master file</h3>
+  <ul>
+    <li>A folder map so you can find any file instantly</li>
+    <li>Quick reference for all key links, accounts, and platforms</li>
+    <li>What systems are active and what they're doing</li>
+    <li>A session startup checklist so you never have to think about it</li>
+    <li>Everything pending across all projects in one place</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <h2>The Session Startup Checklist</h2>
+
+  <p>
+    I added a "How to Start a Session" section to my README so I never have to think about it.
+    Here's what it looks like in practice:
+  </p>
+
+  <div class="code-block">For focused work (one project):
+→ Paste only the relevant BRIEF.md or reference file
+→ "Here's my Project Static brief — let's build v0.04"
+
+For trading/DeFi work:
+→ Paste SYSTEM.md + today's morning brief results
+→ No other context needed
+
+For full planning (Saturday):
+→ Paste README.md only
+→ Covers everything without the token weight of a recap
+
+For CPU 2 (Claude Code + TradingView):
+1. Double-click launch-tradingview-debug.bat
+2. Run: node trading-automation.js --test
+3. Run: morning_brief
+4. Disconnect TradingView MCP after brief (/mcp → disconnect)</div>
+
+  <h2>The Token Hygiene Rules</h2>
+
+  <p>
+    The folder system solves the context problem. These habits keep costs low inside each session:
+  </p>
+
+  <ul>
+    <li><strong>Run /compact at 60% capacity</strong> — not 95%. By the time auto-compact fires at 95%, quality has already degraded.</li>
+    <li><strong>Disconnect unused MCP servers</strong> — each connected server burns ~18,000 tokens per message even when idle.</li>
+    <li><strong>Start a new session for unrelated tasks</strong> — don't carry context from one project into another.</li>
+    <li><strong>Batch your prompts</strong> — three questions in one message costs less than three separate messages.</li>
+    <li><strong>Use free models for low-stakes tasks</strong> — social post generation, titles, descriptions don't need the full model. OpenRouter has 30+ free models.</li>
+  </ul>
+
+  <div class="pull-quote">
+    "The goal is clean context every time. Not a blank slate — a precise one."
+  </div>
+
+  <h2>Why This Matters if You're Building Seriously</h2>
+
+  <p>
+    If you're using AI casually — for a quick question here and there — none of this matters.
+    But if you're using AI to run actual operations across multiple projects simultaneously,
+    you will hit limits. You will lose context. You will watch quality drop mid-session.
+  </p>
+
+  <p>
+    The folder system isn't about being organized for its own sake.
+    It's about making every session count — entering with precision,
+    getting the work done, and not spending half your budget on recap.
+  </p>
+
+  <p>
+    I run this across music production, consulting, product development, a DeFi strategy,
+    and content creation — all from two machines with limited time.
+    <strong>The folder system is what makes that possible.</strong>
+  </p>
+
+  <div class="tag-row">
+    <span class="tag">AI Workflow</span>
+    <span class="tag">Claude Code</span>
+    <span class="tag">Productivity</span>
+    <span class="tag">Session Management</span>
+    <span class="tag">Token Optimization</span>
+    <span class="tag">Building in Public</span>
+  </div>
+
+  <a href="../index.html#articles" class="back-link">← Back to all articles</a>
+</div>
+
+<footer>© 2026 Spark1Early — Boston, MA &nbsp;·&nbsp; #humanmusic &nbsp;·&nbsp; #aiworkflow</footer>
+</body>
+</html>
