@@ -1,1 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowRead — RSVP Reader</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap');
 
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1c1c28;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0ede8;
+    --muted: rgba(240,237,232,0.4);
+    --accent: #c8b87a;
+    --accent2: #7a9cb8;
+    --accent3: #b87a9c;
+    --pulse: rgba(200,184,122,0.15);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  header {
+    width: 100%;
+    padding: 2rem 3rem 1.5rem;
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .tagline {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .main {
+    width: 100%;
+    max-width: 900px;
+    padding: 3rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* DISPLAY AREA */
+  .reader-stage {
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .reader-stage::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at center, var(--pulse) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .reader-stage.playing::before { opacity: 1; }
+
+  .focus-line {
+    position: absolute;
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.3;
+  }
+
+  .word-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.8rem;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    text-align: center;
+    transition: opacity 0.05s;
+    position: relative;
+    z-index: 1;
+    min-height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 2rem;
+    width: 100%;
+  }
+
+  .word-display .word-wrap {
+    display: flex;
+    align-items: baseline;
+    position: relative;
+  }
+
+  .word-display .before {
+    text-align: right;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .word-display .after {
+    text-align: left;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .word-display .orp {
+    color: var(--accent);
+    position: relative;
+  }
+
+  .word-display .orp::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .progress-info {
+    position: absolute;
+    bottom: 1.2rem;
+    display: flex;
+    gap: 2rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    font-family: 'DM Mono', monospace;
+  }
+
+  .progress-bar-wrap {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border);
+  }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.1s linear;
+  }
+
+  /* MUSIC VIZ */
+  .music-viz {
+    position: absolute;
+    top: 1rem;
+    right: 1.5rem;
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 24px;
+  }
+
+  .bar {
+    width: 3px;
+    background: var(--accent2);
+    border-radius: 2px;
+    opacity: 0.6;
+    height: 4px;
+    transition: height 0.1s ease;
+  }
+
+  .music-label {
+    position: absolute;
+    top: 1rem;
+    left: 1.5rem;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    font-family: 'DM Mono', monospace;
+    text-transform: uppercase;
+  }
+
+  /* CONTROLS */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .slider-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+    min-width: 80px;
+  }
+
+  input[type=range] {
+    -webkit-appearance: none;
+    flex: 1;
+    height: 2px;
+    background: var(--border);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 0 3px rgba(200,184,122,0.2);
+  }
+
+  .slider-val {
+    font-size: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* GENRE PILLS */
+  .genre-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .genre-pill {
+    padding: 0.35rem 0.9rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+    background: transparent;
+    letter-spacing: 0.05em;
+  }
+
+  .genre-pill:hover { border-color: var(--accent); color: var(--accent); }
+  .genre-pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent); font-weight: 500; }
+  .genre-pill.active.jazz { background: var(--accent2); border-color: var(--accent2); }
+  .genre-pill.active.classical { background: var(--accent3); border-color: var(--accent3); }
+  .genre-pill.active.lofi { background: #7ab87a; border-color: #7ab87a; }
+
+  /* PLAYBACK BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+  }
+
+  .btn {
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 0.8rem;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 600;
+    padding: 0.65rem 2rem;
+  }
+
+  .btn-primary:hover { opacity: 0.85; color: var(--bg); }
+
+  /* TEXT INPUT */
+  .input-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .input-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-family: 'DM Mono', monospace;
+  }
+
+  textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    padding: 1rem 1.25rem;
+    resize: vertical;
+    min-height: 120px;
+    outline: none;
+    line-height: 1.7;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: rgba(200,184,122,0.4); }
+  textarea::placeholder { color: var(--muted); }
+
+  .settings-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .setting-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    width: 100%;
+  }
+
+  /* IDLE STATE */
+  .idle-text {
+    font-size: 1rem;
+    color: var(--muted);
+    font-style: italic;
+    font-family: 'DM Serif Display', serif;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">FlowRead</div>
+  <div class="tagline">RSVP · Music-Synced · Accessible</div>
+</header>
+
+<div class="main">
+
+  <!-- STAGE -->
+  <div class="reader-stage" id="stage">
+    <div class="focus-line"></div>
+    <div class="music-label" id="musicLabel">♩ NO MUSIC</div>
+    <div class="music-viz" id="musicViz">
+      <div class="bar" id="b1"></div>
+      <div class="bar" id="b2"></div>
+      <div class="bar" id="b3"></div>
+      <div class="bar" id="b4"></div>
+      <div class="bar" id="b5"></div>
+      <div class="bar" id="b6"></div>
+      <div class="bar" id="b7"></div>
+    </div>
+    <div class="word-display" id="wordDisplay">
+      <span class="idle-text">paste text below to begin</span>
+    </div>
+    <div class="progress-info">
+      <span id="wordCount">0 / 0 words</span>
+      <span id="wpmDisplay">— WPM</span>
+      <span id="timeLeft">— remaining</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+  </div>
+
+  <!-- PLAYBACK -->
+  <div class="btn-row">
+    <button class="btn btn-primary" id="playBtn" onclick="togglePlay()">▶ Play</button>
+    <button class="btn" onclick="restartReader()">↺ Restart</button>
+    <button class="btn" onclick="skipBack()">« 10</button>
+    <button class="btn" onclick="skipFwd()">10 »</button>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- SETTINGS -->
+  <div class="settings-grid">
+    <div class="setting-block">
+      <div class="slider-label">Reading Speed</div>
+      <div class="slider-row">
+        <input type="range" id="wpmSlider" min="60" max="800" value="250" step="10" oninput="updateWPM(this.value)">
+        <div class="slider-val" id="wpmVal">250 WPM</div>
+      </div>
+    </div>
+    <div class="setting-block">
+      <div class="slider-label">Font Size</div>
+      <div class="slider-row">
+        <input type="range" id="fontSlider" min="1.5" max="5" value="2.8" step="0.25" oninput="updateFont(this.value)">
+        <div class="slider-val" id="fontVal">2.8rem</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENRE -->
+  <div class="setting-block">
+    <div class="input-label">Music Genre</div>
+    <div class="genre-row">
+      <button class="genre-pill active" id="pill-none" onclick="setGenre('none', this)">No Music</button>
+      <button class="genre-pill jazz" id="pill-jazz" onclick="setGenre('jazz', this)">Jazz</button>
+      <button class="genre-pill classical" id="pill-classical" onclick="setGenre('classical', this)">Orchestral</button>
+      <button class="genre-pill lofi" id="pill-lofi" onclick="setGenre('lofi', this)">Lo-Fi</button>
+      <button class="genre-pill" id="pill-drums" onclick="setGenre('drums', this)">Percussion</button>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TEXT INPUT -->
+  <div class="input-section">
+    <div class="input-label">Your Text</div>
+    <textarea id="textInput" placeholder="Paste any article, book excerpt, or text here. FlowRead will pace it word by word in sync with your chosen music tempo...">The human brain processes language in remarkable ways. When we read traditionally, our eyes dart across lines of text in rapid movements called saccades. Each jump takes precious milliseconds, and the planning required for these movements actually slows our reading comprehension. Rapid Serial Visual Presentation eliminates this entirely — one word, one fixed point, zero eye movement. Studies have shown that readers can reach speeds of four hundred words per minute or more while maintaining strong comprehension. Combined with rhythmic music that mirrors the reading tempo, the brain enters a focused state similar to flow, where information absorption becomes effortless and almost meditative. This is the future of reading.</textarea>
+    <button class="btn" style="align-self:flex-start" onclick="loadText()">Load Text →</button>
+  </div>
+
+</div>
+
+<script>
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+let ctx = null;
+let words = [];
+let wordIndex = 0;
+let wpm = 250;
+let isPlaying = false;
+let timer = null;
+let currentGenre = 'none';
+let musicNodes = [];
+let vizTimer = null;
+let masterGain = null;
+let scheduledNotes = [];
+let bpmInterval = null;
+
+function initAudio() {
+  if (!ctx) {
+    ctx = new AudioContext();
+    masterGain = ctx.createGain();
+    masterGain.gain.value = 0.4;
+    masterGain.connect(ctx.destination);
+  }
+}
+
+const SCALES = {
+  jazz: [60, 62, 63, 65, 67, 69, 70, 72, 74, 75],
+  classical: [60, 62, 64, 65, 67, 69, 71, 72, 74, 76],
+  lofi: [60, 63, 65, 67, 70, 72, 75, 77],
+  drums: null
+};
+
+const GENRES = {
+  none: { label: '♩ NO MUSIC' },
+  jazz: { label: '♪ JAZZ' },
+  classical: { label: '♩ ORCHESTRAL' },
+  lofi: { label: '♫ LO-FI' },
+  drums: { label: '♬ PERCUSSION' }
+};
+
+function midiToFreq(note) {
+  return 440 * Math.pow(2, (note - 69) / 12);
+}
+
+function playNote(freq, start, dur, type = 'sine', vol = 0.15) {
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, start);
+  gain.gain.linearRampToValueAtTime(vol, start + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.001, start + dur);
+  osc.connect(gain);
+  gain.connect(masterGain);
+  osc.start(start);
+  osc.stop(start + dur + 0.05);
+}
+
+function playKick(t) {
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.frequency.setValueAtTime(150, t);
+  osc.frequency.exponentialRampToValueAtTime(40, t + 0.1);
+  gain.gain.setValueAtTime(0.5, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+  osc.connect(gain); gain.connect(masterGain);
+  osc.start(t); osc.stop(t + 0.2);
+}
+
+function playSnare(t) {
+  if (!ctx) return;
+  const buf = ctx.createBuffer(1, ctx.sampleRate * 0.1, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+  const src = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'highpass';
+  filter.frequency.value = 1000;
+  src.buffer = buf;
+  gain.gain.setValueAtTime(0.3, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  src.connect(filter); filter.connect(gain); gain.connect(masterGain);
+  src.start(t); src.stop(t + 0.1);
+}
+
+function playHihat(t, vol = 0.08) {
+  if (!ctx) return;
+  const buf = ctx.createBuffer(1, ctx.sampleRate * 0.05, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1);
+  const src = ctx.createBufferSource();
+  const gain = ctx.createGain();
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'highpass';
+  filter.frequency.value = 8000;
+  src.buffer = buf;
+  gain.gain.setValueAtTime(vol, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
+  src.connect(filter); filter.connect(gain); gain.connect(masterGain);
+  src.start(t); src.stop(t + 0.06);
+}
+
+function scheduleMusicBeat() {
+  if (!ctx || currentGenre === 'none') return;
+  const bpm = wpmToBPM(wpm);
+  const beatDur = 60 / bpm;
+  const now = ctx.currentTime;
+  const ahead = 0.5;
+
+  if (currentGenre === 'drums' || currentGenre === 'jazz' || currentGenre === 'lofi') {
+    playKick(now + ahead);
+    playHihat(now + ahead + beatDur * 0.5);
+    playSnare(now + ahead + beatDur);
+    playHihat(now + ahead + beatDur * 1.5, 0.05);
+  }
+
+  if (currentGenre === 'jazz') {
+    const scale = SCALES.jazz;
+    const root = scale[Math.floor(Math.random() * 3)];
+    const third = scale[Math.floor(Math.random() * 2) + 3];
+    const fifth = scale[Math.floor(Math.random() * 2) + 5];
+    const seventh = scale[Math.floor(Math.random() * 2) + 7];
+    [root, third, fifth, seventh].forEach((n, i) => {
+      playNote(midiToFreq(n - 12), now + ahead + i * beatDur * 0.4, beatDur * 0.35, 'triangle', 0.08);
+    });
+    const melody = scale[Math.floor(Math.random() * scale.length)];
+    playNote(midiToFreq(melody), now + ahead + beatDur * 0.5, beatDur * 0.6, 'sine', 0.1);
+  }
+
+  if (currentGenre === 'classical') {
+    const scale = SCALES.classical;
+    const chord = [scale[0], scale[2], scale[4]];
+    chord.forEach((n, i) => {
+      playNote(midiToFreq(n - 12), now + ahead + i * 0.03, beatDur * 1.8, 'sine', 0.06);
+    });
+    const melody = scale[Math.floor(Math.random() * scale.length)];
+    playNote(midiToFreq(melody + 12), now + ahead + beatDur * 0.5, beatDur * 0.9, 'sine', 0.1);
+    const bass = scale[0];
+    playNote(midiToFreq(bass - 24), now + ahead, beatDur * 2, 'triangle', 0.12);
+  }
+
+  if (currentGenre === 'lofi') {
+    const scale = SCALES.lofi;
+    const note = scale[Math.floor(Math.random() * scale.length)];
+    playNote(midiToFreq(note - 12), now + ahead, beatDur * 1.2, 'triangle', 0.07);
+    const melody = scale[Math.floor(Math.random() * scale.length)];
+    playNote(midiToFreq(melody), now + ahead + beatDur * 0.75, beatDur * 0.5, 'sine', 0.06);
+  }
+}
+
+function wpmToBPM(wpm) {
+  return Math.max(60, Math.min(200, wpm * 0.38));
+}
+
+function startMusic() {
+  if (currentGenre === 'none') return;
+  initAudio();
+  const bpm = wpmToBPM(wpm);
+  const beatMs = (60 / bpm) * 1000;
+  scheduleMusicBeat();
+  bpmInterval = setInterval(() => {
+    if (isPlaying && currentGenre !== 'none') scheduleMusicBeat();
+  }, beatMs * 2);
+}
+
+function stopMusic() {
+  if (bpmInterval) { clearInterval(bpmInterval); bpmInterval = null; }
+}
+
+function restartMusic() {
+  stopMusic();
+  if (isPlaying && currentGenre !== 'none') startMusic();
+}
+
+function animateViz() {
+  if (!isPlaying || currentGenre === 'none') {
+    document.querySelectorAll('.bar').forEach(b => b.style.height = '4px');
+    return;
+  }
+  const bars = document.querySelectorAll('.bar');
+  const bpm = wpmToBPM(wpm);
+  const beatMs = (60 / bpm) * 1000;
+  const t = Date.now() % beatMs / beatMs;
+  bars.forEach((b, i) => {
+    const phase = (t * Math.PI * 2) + (i * 0.8);
+    const h = 4 + Math.abs(Math.sin(phase + i * 0.5)) * 18;
+    b.style.height = Math.round(h) + 'px';
+  });
+  requestAnimationFrame(animateViz);
+}
+
+function loadText() {
+  const raw = document.getElementById('textInput').value.trim();
+  if (!raw) return;
+  words = raw.split(/\s+/).filter(w => w.length > 0);
+  wordIndex = 0;
+  updateCountDisplay();
+  showWord(words[0] || '');
+  document.getElementById('progressBar').style.width = '0%';
+}
+
+function showWord(word) {
+  if (!word) return;
+  const orpIdx = getORP(word);
+  const before = word.slice(0, orpIdx);
+  const orp = word.slice(orpIdx, orpIdx + 1);
+  const after = word.slice(orpIdx + 1);
+  document.getElementById('wordDisplay').innerHTML =
+    `<div class="word-wrap"><span class="before">${before}</span><span class="orp">${orp}</span><span class="after">${after}</span></div>`;
+}
+
+function getORP(word) {
+  if (word.length <= 1) return 0;
+  if (word.length <= 5) return 1;
+  if (word.length <= 9) return 2;
+  return 3;
+}
+
+function updateCountDisplay() {
+  const total = words.length;
+  const remaining = total - wordIndex;
+  const mins = remaining / wpm;
+  const secs = Math.round(mins * 60);
+  document.getElementById('wordCount').textContent = `${wordIndex} / ${total} words`;
+  document.getElementById('wpmDisplay').textContent = `${wpm} WPM`;
+  document.getElementById('timeLeft').textContent = secs < 60
+    ? `${secs}s remaining`
+    : `${Math.ceil(mins)}m remaining`;
+  const pct = total > 0 ? (wordIndex / total) * 100 : 0;
+  document.getElementById('progressBar').style.width = pct.toFixed(1) + '%';
+}
+
+function togglePlay() {
+  if (!words.length) { loadText(); }
+  if (!words.length) return;
+  isPlaying = !isPlaying;
+  const btn = document.getElementById('playBtn');
+  const stage = document.getElementById('stage');
+
+  if (isPlaying) {
+    btn.textContent = '⏸ Pause';
+    stage.classList.add('playing');
+    startReading();
+    startMusic();
+    animateViz();
+    if (ctx) ctx.resume();
+  } else {
+    btn.textContent = '▶ Play';
+    stage.classList.remove('playing');
+    clearTimeout(timer);
+    stopMusic();
+  }
+}
+
+function getPauseMult(word) {
+  const base = 60000 / wpm;
+  if (/\.\.\.$/.test(word) || word === '\u2026') return base * 3.2;
+  if (/[.!?]$/.test(word)) return base * 2.8;
+  if (/[\u2014:\u2013]$/.test(word)) return base * 2.0;
+  if (/;$/.test(word)) return base * 1.8;
+  if (/[,)\]'"\u2019\u201d]$/.test(word)) return base * 1.4;
+  if (/^[(\["'\u2018\u201c]/.test(word)) return base * 1.2;
+  if (/-/.test(word)) return base * 0.9;
+  if (word.length >= 10) return base * 1.15;
+  return base;
+}
+
+function startReading() {
+  clearTimeout(timer);
+
+  function tick() {
+    if (!isPlaying) return;
+    if (wordIndex >= words.length) {
+      stopMusic();
+      isPlaying = false;
+      document.getElementById('playBtn').textContent = '\u25b6 Play';
+      document.getElementById('stage').classList.remove('playing');
+      document.getElementById('wordDisplay').innerHTML = '<span class="idle-text">done \u2014 restart to re-read</span>';
+      return;
+    }
+    const word = words[wordIndex];
+    showWord(word);
+    wordIndex++;
+    updateCountDisplay();
+    const delay = getPauseMult(word);
+    timer = setTimeout(tick, delay);
+  }
+
+  tick();
+}
+
+function restartReader() {
+  clearTimeout(timer);
+  stopMusic();
+  isPlaying = false;
+  wordIndex = 0;
+  document.getElementById('playBtn').textContent = '▶ Play';
+  document.getElementById('stage').classList.remove('playing');
+  if (words.length) { showWord(words[0]); updateCountDisplay(); }
+  else document.getElementById('wordDisplay').innerHTML = '<span class="idle-text">paste text below to begin</span>';
+}
+
+function skipBack() {
+  wordIndex = Math.max(0, wordIndex - 10);
+  if (words.length) showWord(words[wordIndex]);
+  updateCountDisplay();
+}
+
+function skipFwd() {
+  wordIndex = Math.min(words.length - 1, wordIndex + 10);
+  if (words.length) showWord(words[wordIndex]);
+  updateCountDisplay();
+}
+
+function updateWPM(val) {
+  wpm = parseInt(val);
+  document.getElementById('wpmVal').textContent = wpm + ' WPM';
+  updateCountDisplay();
+  if (isPlaying) {
+    startReading();
+    restartMusic();
+  }
+}
+
+function updateFont(val) {
+  document.getElementById('fontVal').textContent = parseFloat(val).toFixed(2) + 'rem';
+  document.getElementById('wordDisplay').style.fontSize = val + 'rem';
+}
+
+function setGenre(genre, el) {
+  currentGenre = genre;
+  document.querySelectorAll('.genre-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('musicLabel').textContent = GENRES[genre].label;
+  if (isPlaying) {
+    stopMusic();
+    if (genre !== 'none') startMusic();
+  }
+}
+
+loadText();
+updateCountDisplay();
+</script>
+</body>
+</html>
