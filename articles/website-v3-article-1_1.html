@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site Update: What's New on Spark1Early v3 — Including FlowRead</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #ffffff; --fg: #0a0a0a; --fg2: #555;
+  --red: #cc0000; --border: #e8e8e8; --bg2: #f7f7f7;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Instrument Sans', sans-serif; background: var(--bg); color: var(--fg); }
+.back {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--fg2); text-decoration: none; padding: 24px 40px;
+  border-bottom: 1px solid var(--border); width: 100%;
+  transition: color 0.2s;
+}
+.back:hover { color: var(--red); }
+.article-header {
+  padding: 60px 40px 40px;
+  border-bottom: 1px solid var(--border);
+  max-width: 780px;
+}
+.article-tag {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 20px;
+}
+.article-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(42px, 7vw, 80px);
+  line-height: 0.95; letter-spacing: 0.02em;
+  margin-bottom: 24px;
+}
+.article-meta {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.1em; color: var(--fg2);
+}
+.article-body {
+  max-width: 680px;
+  padding: 60px 40px;
+  line-height: 1.85;
+  font-size: 16px;
+  color: var(--fg2);
+}
+.article-body h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px; letter-spacing: 0.03em;
+  color: var(--fg); margin: 48px 0 16px;
+}
+.article-body h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 0.03em;
+  color: var(--red); margin: 32px 0 12px;
+}
+.article-body p { margin-bottom: 20px; }
+.article-body strong { color: var(--fg); }
+.article-body a { color: var(--red); text-decoration: none; border-bottom: 1px solid var(--red); }
+.article-body a:hover { opacity: 0.7; }
+.callout {
+  background: var(--bg2); border-left: 3px solid var(--red);
+  padding: 20px 24px; margin: 32px 0;
+  font-size: 15px;
+}
+.callout strong { color: var(--fg); display: block; margin-bottom: 6px;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--red);
+}
+.feature-list {
+  list-style: none; margin: 20px 0 32px;
+}
+.feature-list li {
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  display: flex; gap: 16px; align-items: flex-start;
+}
+.feature-list li:last-child { border-bottom: none; }
+.feature-num {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--red); min-width: 24px; margin-top: 3px;
+}
+.roadmap {
+  background: var(--bg2); padding: 24px;
+  margin: 24px 0; border: 1px solid var(--border);
+}
+.roadmap-item {
+  display: flex; gap: 12px; align-items: center;
+  padding: 8px 0; font-size: 14px; color: var(--fg2);
+  border-bottom: 1px solid var(--border);
+}
+.roadmap-item:last-child { border-bottom: none; }
+.roadmap-item::before {
+  content: '○'; color: var(--border);
+  font-size: 12px; min-width: 16px;
+}
+.try-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red); color: #fff;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 12px 28px; text-decoration: none;
+  margin: 8px 0 32px; transition: opacity 0.2s;
+}
+.try-btn:hover { opacity: 0.85; border: none; }
+footer {
+  padding: 32px 40px; border-top: 1px solid var(--border);
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--fg2); letter-spacing: 0.08em;
+}
+@media (max-width: 600px) {
+  .article-header, .article-body, .back { padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<a href="https://spark1early.github.io" class="back">← Back to spark1early.github.io</a>
+
+<div class="article-header">
+  <p class="article-tag">Site Update · April 2026</p>
+  <h1>WHAT'S NEW ON SPARK1EARLY V3 — INCLUDING FLOWREAD</h1>
+  <p class="article-meta">Spark1Early · April 28, 2026 · AI Workflow / Tools</p>
+</div>
+
+<div class="article-body">
+
+<p>The site got a significant update this week. Not just visual — structural. New features, new tools, a new reading experience, and the first public release of a project that's been in development as part of a larger creative infrastructure build. Here's what changed and why.</p>
+
+<h2>THE VISUAL UPDATE</h2>
+
+<p>The site moved from its previous dark-first design to a <strong>white background with a black and red color system</strong>. The goal was legibility and contrast — content-first, not aesthetic-first. The Bebas Neue and Instrument Sans pairing stays. What changed is the space around everything. More breathing room. Cleaner separation between sections.</p>
+
+<p>Every section now has a large background number that anchors it spatially without cluttering the actual content. The nav is sticky with a blur effect. Section transitions are subtle but intentional.</p>
+
+<h3>Night Mode</h3>
+<p>A light/dark toggle now lives in the nav. One click switches the entire site between the white system and a true dark theme — not just a dark background, but a fully recalibrated color system where every variable adjusts: borders, tags, card backgrounds, section numbers, and accents. The toggle remembers nothing between sessions intentionally — each visit starts clean.</p>
+
+<h2>LIVE WATCHLIST TICKER</h2>
+
+<p>A scrolling price ticker now runs across the top of every page. It pulls live data every 60 seconds via the CoinGecko API — no API key required, no server needed. Assets on the ticker:</p>
+
+<ul class="feature-list">
+  <li><span class="feature-num">▸</span><span><strong>Crypto:</strong> BTC, ETH, SOL, TAO (Bittensor), XRP — with live price and 24-hour change indicator</span></li>
+  <li><span class="feature-num">▸</span><span><strong>Equities:</strong> NVDA, AAPL, TSLA — displayed alongside crypto in the same stream</span></li>
+  <li><span class="feature-num">▸</span><span><strong>Private:</strong> Anthropic and OpenAI are listed as PRIVATE with flavor text — because they are, and because watching them matters regardless</span></li>
+</ul>
+
+<p>The ticker pauses on hover so you can actually read a price. It loops seamlessly and degrades gracefully if the API is unavailable — prices just show a dash until they load.</p>
+
+<h2>EMBEDDED MUSIC PLAYER</h2>
+
+<p>The latest release — <em>The Ketchup Packet</em> — is now embedded directly on the Music section of the site via Bandcamp's native embed. No redirect required. You can stream it in full, right on the page. The full catalog grid sits below it with links to every project in the Bandcamp library.</p>
+
+<h2>VISUALS SECTION — AI SHORTS GALLERY</h2>
+
+<p>A new dedicated section for AI-generated visual work lives between Music and Projects. The first entry is <em>They Stream</em> — a short film parody of John Carpenter's They Live (1988), built entirely with Seedance 2.0, MidJourney, OmniReference, and CapCut. More entries will be added as the visual work continues. The section is designed to grow as a gallery of AI-assisted creative work.</p>
+
+<h2>PROJECT PAGES WITH PROGRESS LOGS</h2>
+
+<p>Both stealth projects — <strong>Project Static</strong> and <strong>Project Signal</strong> — now have structured presence on the site. The pages share context without revealing product details. Each has a timestamped progress log that updates as development milestones are hit. The product names and descriptions stay intentionally vague until launch day.</p>
+
+<p>This approach keeps the projects visible and generates ambient interest without compromising the surprise of the actual launch.</p>
+
+<h2>FLOWREAD v1.1 — THE FIRST OPEN SOURCE PROJECT</h2>
+
+<p>This is the most significant addition to the site — and it's also the first project from this build being released publicly.</p>
+
+<p><strong>FlowRead</strong> is a browser-based RSVP (Rapid Serial Visual Presentation) reader. Instead of scanning across a page, it shows text one word at a time at a fixed center point — eliminating eye movement entirely and dramatically increasing reading speed and focus.</p>
+
+<p>The concept wasn't invented here — RSVP reading has academic research behind it going back decades. What FlowRead adds is the music layer.</p>
+
+<h3>BPM-Synced Generative Music</h3>
+
+<p>Every genre of background music FlowRead plays is mathematically locked to your reading speed. <strong>BPM = WPM × 0.38</strong>. At 250 words per minute, the music plays at approximately 95 BPM. Slow down your reading, the music slows. Speed up, it follows. The tempo of what you hear anchors the tempo of how you process.</p>
+
+<p>The music is fully procedurally generated — no audio files, no streaming service required. It runs entirely through the browser's Web Audio API. A new arrangement generates every session. The genres available:</p>
+
+<ul class="feature-list">
+  <li><span class="feature-num">01</span><span><strong>Jazz</strong> — Walking bass, 7th chord voicings, melodic runs randomized from a jazz scale on each beat</span></li>
+  <li><span class="feature-num">02</span><span><strong>Orchestral</strong> — Sustained triads, melodic line, deep bass — slow and swelling</span></li>
+  <li><span class="feature-num">03</span><span><strong>Lo-Fi</strong> — Soft harmony, muted percussion, relaxed feel</span></li>
+  <li><span class="feature-num">04</span><span><strong>Percussion</strong> — Pure kick/snare/hi-hat rhythm engine, no pitch</span></li>
+  <li><span class="feature-num">05</span><span><strong>No Music</strong> — Silent reader mode</span></li>
+</ul>
+
+<h3>ORP — Optimal Recognition Point</h3>
+
+<p>Every word displayed in FlowRead highlights its ORP — the letter your eye naturally anchors to when reading. Text before it right-aligns to center. Text after it extends left. Your eye locks on one spot for every single word. The highlighted letter is the same concept that makes speed reading possible without losing comprehension.</p>
+
+<h3>Punctuation-Aware Pacing</h3>
+
+<p>The reading engine doesn't just display words at a fixed rate. It applies custom delay multipliers based on trailing punctuation — mimicking the natural rhythm of spoken language. A period gets a 2.8× pause. An ellipsis gets 3.2×. A comma gets 1.4×. Hyphenated words get a 0.9× acceleration. The result is reading that breathes instead of marching.</p>
+
+<h3>Accessibility</h3>
+
+<p>FlowRead was built with accessibility in mind. The ORP centering reduces cognitive load per word. The punctuation pacing mirrors natural speech. The music tempo anchors attention without lyrics competing with reading. Font size is fully adjustable from 1.5rem to 5rem. The high contrast dark theme is intentional — not aesthetic.</p>
+
+<a href="/tools/flowread.html" class="try-btn">Try FlowRead →</a>
+
+<div class="callout">
+  <strong>Technical specs</strong>
+  Zero dependencies. No npm, no framework, no build tools. Single self-contained HTML file. Vanilla JS, Web Audio API, CSS custom properties. Works offline after first load. Compatible with Chrome, Firefox, Safari, Samsung Internet.
+</div>
+
+<h2>OPEN SOURCE ROADMAP</h2>
+
+<p>FlowRead v1 is the foundation. Here's what's planned for future versions — both for this site and for the open source release so any developer can implement it on their own:</p>
+
+<div class="roadmap">
+  <div class="roadmap-item">Import from URL — fetch and strip article text automatically</div>
+  <div class="roadmap-item">PDF and ePub file input support</div>
+  <div class="roadmap-item">Spotify / SoundCloud integration — licensed music alongside generative</div>
+  <div class="roadmap-item">User reading speed history and profiles</div>
+  <div class="roadmap-item">Dyslexia-friendly font toggle (OpenDyslexic)</div>
+  <div class="roadmap-item">Chunk mode — show 2–3 words at a time instead of 1</div>
+  <div class="roadmap-item">Browser extension version</div>
+  <div class="roadmap-item">React / Vue component version for framework integration</div>
+  <div class="roadmap-item">Offline PWA support</div>
+</div>
+
+<p>The open source release will be documented and published with implementation instructions so any site can add FlowRead as a reading feature. The goal is simple: better reading experiences for more people, regardless of where they're reading.</p>
+
+<h2>WHAT'S NEXT</h2>
+
+<p>The site will continue to evolve as the projects do. Project Signal and Project Static both have launch dates on the horizon — when they go live, their stealth pages become full product pages. The Visuals section will grow as more AI short-form work gets built. And FlowRead will get its first major update when the URL import feature lands.</p>
+
+<p>Everything on this site is built the same way the music was built — independently, with intention, using the best available tools. No agency. No team. Just the work.</p>
+
+<p style="margin-top:40px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--fg2)">— Spark1Early · Boston, MA · 2026</p>
+
+</div>
+
+<footer>© 2026 Spark1Early — Boston, MA · #humanmusic · #aiworkflow</footer>
+
+</body>
+</html>
