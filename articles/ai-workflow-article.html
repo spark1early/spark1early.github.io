@@ -21,20 +21,237 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-<!--
-  FLOWREAD ARTICLE EMBED v1.7
-  Drop this block into any article page just above the article body.
-  It auto-detects the article title + body text and passes it to FlowRead.
-  No copy-paste needed by the reader.
--->
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; line-height: 1.8; }
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); background: rgba(10,10,10,0.95); backdrop-filter: blur(12px); }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); letter-spacing: 0.1em; text-decoration: none; }
+  .nav-back { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+  .nav-back:hover { color: var(--accent); }
+  .article-wrap { max-width: 740px; margin: 0 auto; padding: 7rem 2rem 6rem; }
+  .article-meta { margin-bottom: 3rem; padding-bottom: 2rem; border-bottom: 1px solid var(--border); }
+  .article-category { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+  .article-category::before { content: ''; display: block; width: 2rem; height: 1px; background: var(--accent); }
+  h1 { font-family: var(--mono); font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.25rem; letter-spacing: -0.02em; }
+  .article-subtitle { font-size: 1.1rem; color: var(--muted); line-height: 1.8; margin-bottom: 1.5rem; }
+  .article-date { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.08em; }
+  .credit-box { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 1.25rem 1.5rem; margin-bottom: 3rem; font-size: 0.88rem; color: var(--muted); line-height: 1.7; }
+  .credit-box strong { color: var(--text); font-weight: 500; }
+  h2 { font-family: var(--mono); font-size: 1.3rem; font-weight: 700; margin: 3rem 0 1rem; color: var(--text); line-height: 1.2; }
+  h3 { font-family: var(--mono); font-size: 1rem; font-weight: 700; margin: 2rem 0 0.75rem; color: var(--accent); }
+  p { font-size: 1rem; color: #cccccc; margin-bottom: 1.25rem; line-height: 1.9; }
+  p strong { color: var(--text); font-weight: 500; }
+  ul, ol { margin: 0.75rem 0 1.5rem 0; padding-left: 0; list-style: none; }
+  ul li, ol li { font-size: 0.95rem; color: #cccccc; padding: 0.4rem 0 0.4rem 1.5rem; position: relative; line-height: 1.8; counter-increment: list-counter; }
+  ul li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); }
+  ol { counter-reset: list-counter; }
+  ol li::before { content: counter(list-counter) "."; position: absolute; left: 0; color: var(--accent); font-family: var(--mono); font-size: 0.8rem; }
+  .pull-quote { border-left: 3px solid var(--accent); padding: 1rem 1.5rem; margin: 2.5rem 0; font-family: var(--mono); font-size: 1rem; color: var(--text); line-height: 1.7; background: var(--surface); }
+  .command-box { background: #0d1117; border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 1rem 1.25rem; margin: 1rem 0 1.5rem; font-family: var(--mono); font-size: 0.85rem; color: var(--accent); letter-spacing: 0.04em; line-height: 1.7; }
+  .tier-badge { display: inline-block; font-family: var(--mono); font-size: 0.65rem; color: #000; background: var(--accent); padding: 0.2rem 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+  .workflow-box { background: var(--surface2); border: 1px solid var(--border); border-top: 3px solid var(--accent); padding: 1.5rem; margin: 2rem 0; }
+  .workflow-box h4 { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 0.75rem; }
+  .workflow-box p { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .section-divider { border: none; border-top: 1px solid var(--border); margin: 3rem 0; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .tag { font-family: var(--mono); font-size: 0.65rem; padding: 0.35rem 0.75rem; border: 1px solid var(--border); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .back-link { display: inline-block; margin-top: 3rem; font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+  .back-link:hover { color: var(--accent); }
+  footer { border-top: 1px solid var(--border); padding: 2rem; text-align: center; font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; }
+  table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.88rem; }
+  th { font-family: var(--mono); font-size: 0.7rem; color: #000; background: var(--accent); padding: 0.6rem 0.75rem; text-align: left; letter-spacing: 0.06em; text-transform: uppercase; }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); color: #cccccc; vertical-align: top; }
+  tr:nth-child(even) td { background: var(--surface); }
 
-<style>
-.fr-embed {
-  background: #0a0a0a;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 20px 24px;
-  margin: 0 0 40px 0;
-  display: flex;
+  /* FlowRead embed styles */
+  .fr-embed { background: #0a0a0a; border: 1px solid rgba(255,255,255,0.08); padding: 20px 24px; margin: 0 0 40px 0; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .fr-embed-left { display: flex; flex-direction: column; gap: 4px; }
+  .fr-embed-tag { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: #cc0000; }
+  .fr-embed-title { font-family: 'Space Mono', monospace; font-size: 18px; letter-spacing: 0.04em; color: #f0f0f0; font-weight: 700; }
+  .fr-embed-sub { font-size: 12px; color: rgba(240,240,240,0.4); font-family: 'DM Sans', sans-serif; }
+  .fr-embed-btn { display: inline-flex; align-items: center; gap: 8px; background: #cc0000; color: #fff; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; padding: 10px 20px; text-decoration: none; border: none; cursor: pointer; white-space: nowrap; transition: background 0.2s; }
+  .fr-embed-btn:hover { background: #ff2222; }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">SPARK1EARLY</a>
+  <a href="../index.html#articles" class="nav-back">← Back to Articles</a>
+</nav>
+
+<div class="article-wrap">
+
+  <!-- FLOWREAD EMBED — correctly placed in body -->
+  <div class="fr-embed" id="frEmbedBlock">
+    <div class="fr-embed-left">
+      <span class="fr-embed-tag">▶ FlowRead v1.7</span>
+      <span class="fr-embed-title">READ THIS ARTICLE WITH FLOWREAD</span>
+      <span class="fr-embed-sub">RSVP reader · Real genre music · BPM-synced · 60–800 WPM</span>
+    </div>
+    <button class="fr-embed-btn" onclick="launchFlowRead()">Open in FlowRead →</button>
+  </div>
+
+  <div class="article-meta">
+    <div class="article-category">AI Workflow — Session Notes</div>
+    <h1>How to Use AI Efficiently:<br>Stop Burning Your Usage Limits</h1>
+    <p class="article-subtitle">Most people treat AI usage like an unlimited utility. It isn't. Here's the complete guide to understanding tokens, managing context, and getting 8–10x more out of every session.</p>
+    <div class="article-date">April 7, 2026 &nbsp;·&nbsp; AI Workflow Series</div>
+  </div>
+
+  <div class="credit-box">
+    <strong>Source credit:</strong> These notes are compiled from educational content on AI workflow optimization using Claude Code and related tools. Content sourced from YouTube tutorials on token management, context hygiene, and session optimization.<br><br>
+    This is not paid or sponsored content. These are working notes from my own AI consulting practice — things I actually use and test. The workflow applications at the end of this article are real examples from my setup.
+  </div>
+
+  <p>If you've ever hit a usage limit mid-session, gotten slower responses as a conversation goes on, or wondered why the AI seems to "forget" things toward the end of a long chat — you're experiencing the same problem. And it's not random. <strong>It's a token problem.</strong> And once you understand it, you can fix it.</p>
+
+  <div class="pull-quote">"By treating your tokens as a limited resource rather than an infinite utility, you can achieve 8x to 10x reductions in cost and usage."</div>
+
+  <h2>Part 1 — The Token Economy: Why Limits Happen</h2>
+  <h3>What Is a Token?</h3>
+  <p>A token is the smallest unit of text an AI model processes — roughly 0.75 words. Every input you send and every output you receive is measured in tokens. Your usage limit is essentially a token budget, and how you spend it determines how far you get in a session.</p>
+  <h3>The Compounding History Problem</h3>
+  <p>This is the core issue most people don't know about. Every time you send a message, the AI doesn't just read your new message — <strong>it rereads the entire conversation from the beginning.</strong> Every single turn.</p>
+  <p>What that means in practice: message 1 might cost 500 tokens. Message 30 in the same conversation could cost 15,000 tokens — because it's reprocessing all 29 previous messages plus your new one. Costs grow exponentially, not linearly.</p>
+  <h3>Invisible Overhead You Don't See</h3>
+  <p>On top of conversation history, every message also reloads what's running in the background: system prompts, custom instructions, MCP servers, active skills and connectors. A single connected MCP server can consume approximately <strong>18,000 tokens per message</strong> before you've typed a single word.</p>
+  <p>Run this command to see exactly what's eating your tokens:</p>
+  <div class="command-box">/context</div>
+  <p>This shows a full breakdown: conversation history, MCP overhead, loaded files, system prompts, and your current capacity percentage. Most people have never run this and have no idea what's actually consuming their budget.</p>
+  <h3>The Business Model Behind It</h3>
+  <p>AI companies often have an incentive to encourage "context window inflation" — long conversations, many connected tools, large file uploads. More tokens consumed means more revenue once subsidized pricing ends. Understanding this doesn't mean avoiding AI tools — it means using them strategically instead of casually.</p>
+
+  <hr class="section-divider">
+
+  <h2>Part 2 — Tier 1: Context Hygiene (Start Here)</h2>
+  <div class="tier-badge">Tier 1 — Fundamental</div>
+  <h3>Start Fresh Often</h3>
+  <p>The single most effective habit: start a new conversation for every unrelated task. Carrying context from one project into another is the fastest way to burn your limit. Use the <code>/clear</code> command or simply open a new chat.</p>
+  <div class="command-box">/clear</div>
+  <h3>Batch Your Prompts</h3>
+  <p>Instead of sending three separate messages, combine your questions and instructions into one well-structured prompt. This alone can cut your token usage by 60% on complex tasks.</p>
+  <h3>The Markdown Rule for Files</h3>
+  <p>Never upload raw PDFs or images if you only need the text. Raw PDFs can turn a 4,500-word document into over 100,000 tokens. Converting to Markdown first can reduce token weight by up to <strong>20x</strong>.</p>
+  <h3>Disconnect Unused MCP Servers</h3>
+  <p>Every connected MCP server reloads its tool definitions into your context with every message — whether you're using it or not.</p>
+  <div class="command-box">mcp</div>
+
+  <hr class="section-divider">
+
+  <h2>Part 3 — Tier 2: Advanced Efficiency Tactics</h2>
+  <div class="tier-badge">Tier 2 — Advanced</div>
+  <h3>Keep System Instructions Lean</h3>
+  <p>Your <code>claude.md</code> file is reprocessed with every single message. Keep it under 500 lines — ideally under 200. Every word adds to your per-message cost permanently.</p>
+  <h3>Manual Compaction at 60%</h3>
+  <p>Claude automatically compacts at 95% capacity — but by that point quality has already degraded. Run <code>/compact</code> manually when you hit 60%.</p>
+  <div class="command-box">/compact — run at 60% capacity, not 95%</div>
+  <h3>The 95% Confidence Rule</h3>
+  <p>Add this to your <code>claude.md</code>: <strong>"Do not make any changes or write any code until you reach 95% confidence in what needs to be built."</strong></p>
+  <h3>Disable Extended Thinking for Routine Tasks</h3>
+  <p>Extended Thinking burns significantly more tokens. Turn it off for formatting, simple research, and content generation. Reserve it for genuinely difficult work.</p>
+  <h3>Reference Specific Files, Not Folders</h3>
+  <div class="command-box">@filename — reference specific files only</div>
+
+  <hr class="section-divider">
+
+  <h2>Part 4 — Tier 3: Strategic Workload Optimization</h2>
+  <div class="tier-badge">Tier 3 — Strategic</div>
+  <h3>Model Routing</h3>
+  <table>
+    <thead><tr><th>Task type</th><th>Recommended model</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Simple formatting, research sub-tasks</td><td>Haiku</td><td>Fast, cheap, handles simple tasks well</td></tr>
+      <tr><td>Standard coding, content creation</td><td>Sonnet</td><td>Best balance of quality and cost</td></tr>
+      <tr><td>Deep architectural planning</td><td>Opus</td><td>Reserve for tasks that genuinely need it — costs 5x more</td></tr>
+      <tr><td>Repetitive background tasks</td><td>OpenRouter free models</td><td>Qwen 2.5 Coder, DeepSeek, GLM 4.5 air — $0 cost</td></tr>
+    </tbody>
+  </table>
+  <h3>OpenRouter — Free Models for Background Tasks</h3>
+  <ol>
+    <li>Create a free account at openrouter.ai — no credit card required</li>
+    <li>Generate a free API key in your dashboard</li>
+    <li>Open Claude Code settings and add three lines: redirect to OpenRouter, your API key, and set model to <code>openrouter/free</code></li>
+    <li>For coding tasks, Qwen 2.5 Coder (128K context window) is the recommended free option</li>
+  </ol>
+  <h3>Off-Peak Scheduling</h3>
+  <ul><li>Peak: 8am – 2pm Eastern / 5am – 11am Pacific / 1pm – 7pm GMT</li></ul>
+  <p>Schedule heavy builds for evenings and weekends. Saturday is already your power day — this is another reason it's the right choice.</p>
+  <h3>The Two-Mode Strategy</h3>
+  <ul>
+    <li><strong>Information Gathering Mode:</strong> Use Perplexity, NotebookLM, free models for research.</li>
+    <li><strong>Execution Mode:</strong> Bring a clean Markdown summary into a fresh Claude session and do the actual work.</li>
+  </ul>
+
+  <hr class="section-divider">
+
+  <h2>Part 5 — Monitoring Your Usage</h2>
+  <div class="command-box">
+    /context — full breakdown of token usage<br>
+    /cost — estimated spend for current session<br>
+    /compact — manually summarize history (run at 60%)<br>
+    /clear — start fresh conversation<br>
+    mcp — view and disconnect MCP servers
+  </div>
+
+  <hr class="section-divider">
+
+  <h2>Part 6 — How I Apply This in My Own Workflow</h2>
+
+  <div class="workflow-box">
+    <h4>TradingView MCP on CPU 2</h4>
+    <p>The TradingView MCP server is connected on CPU 2 for morning briefs. When I'm not running a brief, I disconnect it — an active MCP server burns ~18,000 tokens per message even when idle.</p>
+  </div>
+  <div class="workflow-box">
+    <h4>Saturday Power Day Sessions</h4>
+    <p>Saturday sessions get the most generous usage rates. The session reset trick: a small throwaway prompt Friday evening staggers the 5-hour window to reset during Saturday's heavy work.</p>
+  </div>
+  <div class="workflow-box">
+    <h4>NotebookLM as Information Gathering Mode</h4>
+    <p>NotebookLM is already in the workflow for research. Gather in NotebookLM, bring a clean summary into Claude for execution. Every article on this site starts that way.</p>
+  </div>
+  <div class="workflow-box">
+    <h4>The 95% Confidence Rule for Project Builds</h4>
+    <p>Project Static and miniLABEL are complex builds. The 95% confidence rule means Claude won't generate code until requirements are fully clear — preventing wasted builds and token bleed.</p>
+  </div>
+
+  <div class="pull-quote">"The AI isn't slow or dumb toward the end of a session. It's out of budget. Manage the budget and the quality stays consistent."</div>
+
+  <div class="tag-row">
+    <span class="tag">AI Tools</span>
+    <span class="tag">Claude Code</span>
+    <span class="tag">Workflow</span>
+    <span class="tag">Token Management</span>
+    <span class="tag">OpenRouter</span>
+    <span class="tag">Session Notes</span>
+  </div>
+
+  <a href="../index.html#articles" class="back-link">← Back to all articles</a>
+
+</div>
+
+<footer>© 2026 Spark1Early — Boston, MA &nbsp;·&nbsp; #humanmusic &nbsp;·&nbsp; #aiworkflow</footer>
+
+<script>
+function launchFlowRead() {
+  let text = '';
+  const titleEl = document.querySelector('h1');
+  if (titleEl) text += titleEl.textContent.trim() + '. ';
+  const bodyEls = document.querySelectorAll('p, h2, h3, li');
+  bodyEls.forEach(el => {
+    if (!el.closest('#frEmbedBlock')) {
+      const t = el.textContent.trim();
+      if (t.length > 10) text += t + ' ';
+    }
+  });
+  text = text.replace(/\s+/g, ' ').trim();
+  if (!text || text.split(' ').length < 20) { window.open('/tools/flowread.html', '_blank'); return; }
+  const encoded = encodeURIComponent(text);
+  const truncated = encoded.length > 8000 ? encoded.substring(0, 8000) : encoded;
+  window.open('/tools/flowread.html?article=' + truncated, '_blank');
+}
+</script>
+
+</body>
+</html>  display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
