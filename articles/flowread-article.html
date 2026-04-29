@@ -251,11 +251,74 @@ footer {
 
 <p>Seven sections of this site, ready to read. Pick a speed. Pick a genre. Hit play.</p>
 
-<a href="/tools/flowread.html" class="try-btn">Try FlowRead v1.3 →</a>
+<a href="/tools/flowread.html" class="try-btn">Try FlowRead v1.7 →</a>
 
 <div class="callout">
   <strong>A note on the build</strong>
   FlowRead was built entirely using AI tools — Claude for architecture and code generation, iterating through three versions in one session. No frameworks. No build tools. One HTML file. This is what AI consulting looks like from the inside: not using AI to replace thinking, but using it to collapse the time between an idea and a working product.
+</div>
+
+<h2>VERSION HISTORY</h2>
+
+<p>FlowRead moved fast. Here's every version and what changed:</p>
+
+<div class="version-timeline">
+  <div class="version-item">
+    <div class="version-label">V1.0</div>
+    <div class="version-content">
+      <strong>The original build</strong>
+      Basic RSVP reader. BPM-synced generative music via Web Audio API oscillators. 4 genres: Jazz, Orchestral, Lo-Fi, Percussion. ORP highlighting. Punctuation-aware pacing. Single HTML file, zero dependencies. Paste text, hit play.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.1</div>
+    <div class="version-content">
+      <strong>Site integration attempt</strong>
+      Added site content detection and theme mimicry. Cross-origin DOM approach failed on standalone pages — sections showed "not detected," theme didn't apply. Right concept, wrong implementation.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.2</div>
+    <div class="version-content">
+      <strong>Hardcoded and working</strong>
+      Scrapped cross-origin approach. Hardcoded all 7 site sections and Spark1Early theme directly. Section nav works instantly. Deployed live at spark1early.github.io/tools/flowread.html.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.3</div>
+    <div class="version-content">
+      <strong>8 genres</strong>
+      Expanded from 4 to 8 genres. Added Theta Ambient (named after the 4–8Hz focus brainwave), Solo Piano, Big Band Swing, and a dedicated Percussion mode. Freemium model confirmed — not open source.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.4</div>
+    <div class="version-content">
+      <strong>Better synthesis</strong>
+      New instrument-specific synth functions: piano(), bass(), brass(), pad(), drone(). Swing jazz hihat fix with proper triplet t-tt-t-tt grid. Article page integration via ?article= URL parameter.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.5</div>
+    <div class="version-content">
+      <strong>Tone.js upgrade (rolled back)</strong>
+      Attempted upgrade to Tone.js for realistic instrument synthesis — PolySynth piano, MembraneSynth drums, MetalSynth cymbals, Reverb/Chorus effects chains. Mobile AudioContext suspension issues caused music to stop on genre switch and WPM change. Rolled back.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.6</div>
+    <div class="version-content">
+      <strong>Back to Web Audio — melodic sequences</strong>
+      Returned to stateless Web Audio API. Replaced random notes with fixed melodic sequences per genre. Added MELODIES, BASSLINES, and CHORDS tables. Theta Ambient fixed — faster attack so it's actually audible. Genre switching instant with no transport restart.
+    </div>
+  </div>
+  <div class="version-item">
+    <div class="version-label">V1.7</div>
+    <div class="version-content">
+      <strong>Real recorded audio loops — current version</strong>
+      Replaced all synthesized instruments with real recorded loops from freesound.org (CC0 licensed). Jazz sounds like jazz. Lo-fi sounds like lo-fi. BPM sync via Web Audio API playbackRate — tempo adjusts live as you move the WPM slider. Pre-loads all 7 genres in background after first play for instant switching. Works offline after first load. 7 genres: Swing Jazz, Lo-Fi, Orchestral, Theta Ambient, Solo Piano, Big Band Swing, Percussion.
+    </div>
+  </div>
 </div>
 
 <p style="margin-top:40px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--fg2)">— Spark1Early · Boston, MA · 2026</p>
