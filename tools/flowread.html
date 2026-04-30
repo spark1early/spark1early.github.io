@@ -905,14 +905,16 @@ async function setGenre(genre, el) {
 
 updateCountDisplay();
 
-// ─── URL PARAM — runs at page load, not inside loadSection ───────
+// ─── SESSION STORAGE — load article text on page load ────────────
+// Text is stored in sessionStorage by the article page (no URL limit)
 (function() {
   try {
-    const params = new URLSearchParams(window.location.search);
-    const articleText = params.get('article');
+    const articleText = sessionStorage.getItem('flowread_article');
     if (!articleText) return;
-    const decoded = decodeURIComponent(articleText);
-    const cleaned = decoded.replace(/\s+/g, ' ').trim();
+    // Clear after reading so it doesn't persist to next visit
+    sessionStorage.removeItem('flowread_article');
+
+    const cleaned = articleText.replace(/\s+/g, ' ').trim();
     if (!cleaned || cleaned.split(' ').length < 10) return;
 
     words = cleaned.split(' ').filter(w => w.length > 0);
@@ -938,7 +940,7 @@ updateCountDisplay();
 
     // Scroll ARTICLE button into view
     setTimeout(() => aBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' }), 100);
-  } catch(e) { console.warn('Article param error:', e); }
+  } catch(e) { console.warn('FlowRead session storage error:', e); }
 })();
 </script>
 </body></html>
