@@ -258,113 +258,48 @@
 </nav>
 
 <div class="article-wrap">
-  <!--
-  FLOWREAD ARTICLE EMBED v1.7
-  Drop this block into any article page just above the article body.
-  It auto-detects the article title + body text and passes it to FlowRead.
-  No copy-paste needed by the reader.
--->
 
-<style>
-.fr-embed {
-  background: #0a0a0a;
-  border: 1px solid rgba(255,255,255,0.08);
-  padding: 20px 24px;
-  margin: 0 0 40px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-.fr-embed-left { display: flex; flex-direction: column; gap: 4px; }
-.fr-embed-tag {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #cc0000;
-}
-.fr-embed-title {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 18px;
-  letter-spacing: 0.04em;
-  color: #f0f0f0;
-}
-.fr-embed-sub {
-  font-size: 12px;
-  color: rgba(240,240,240,0.4);
-  font-family: 'Instrument Sans', sans-serif;
-}
-.fr-embed-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #cc0000;
-  color: #fff;
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 10px 20px;
-  text-decoration: none;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: background 0.2s;
-}
-.fr-embed-btn:hover { background: #ff2222; }
+  <style>
+.fr-embed{background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);padding:20px 24px;margin:0 0 40px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.fr-embed-left{display:flex;flex-direction:column;gap:4px;}
+.fr-embed-tag{font-family:monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#cc0000;}
+.fr-embed-title{font-size:18px;letter-spacing:0.04em;color:#f0f0f0;font-weight:700;}
+.fr-embed-sub{font-size:12px;color:rgba(240,240,240,0.4);}
+.fr-embed-btn{background:#cc0000;color:#fff;font-family:monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;border:none;cursor:pointer;transition:background 0.2s;white-space:nowrap;}
+.fr-embed-btn:hover{background:#ff2222;}
 </style>
-
 <div class="fr-embed" id="frEmbedBlock">
   <div class="fr-embed-left">
-    <span class="fr-embed-tag">▶ FlowRead v1.7</span>
+    <span class="fr-embed-tag">&#9654; FlowRead v1.7</span>
     <span class="fr-embed-title">READ THIS ARTICLE WITH FLOWREAD</span>
-    <span class="fr-embed-sub">RSVP reader · Real genre music · BPM-synced · 60–800 WPM</span>
+    <span class="fr-embed-sub">RSVP reader &middot; Real genre music &middot; BPM-synced &middot; 60&ndash;800 WPM</span>
   </div>
-  <button class="fr-embed-btn" onclick="launchFlowRead()">
-    Open in FlowRead →
-  </button>
+  <button class="fr-embed-btn" onclick="launchFlowRead()">Open in FlowRead &rarr;</button>
 </div>
-
 <script>
-function launchFlowRead() {
-  // Extract article text automatically
-  let text = '';
-
-  // Get title
-  const titleEl = document.querySelector('.article-header h1, article h1, h1');
-  if (titleEl) text += titleEl.textContent.trim() + '. ';
-
-  // Get body content — skip the embed block itself
-  const bodyEls = document.querySelectorAll(
-    '.article-body p, .article-body h2, .article-body h3, .article-body li, article p, article h2, main p'
-  );
-
-  bodyEls.forEach(el => {
-    if (!el.closest('#frEmbedBlock')) {
-      const t = el.textContent.trim();
-      if (t.length > 10) text += t + ' ';
+function launchFlowRead(){
+  var text='';
+  var t=document.querySelector('h1');
+  if(t) text+=t.textContent.trim()+'. ';
+  var els=document.querySelectorAll('p,h2,h3,li');
+  els.forEach(function(el){
+    if(!el.closest('#frEmbedBlock')){
+      var s=el.textContent.trim();
+      if(s.length>10) text+=s+' ';
     }
   });
-
-  text = text.replace(/\s+/g, ' ').trim();
-
-  if (!text || text.split(' ').length < 20) {
-    window.open('/tools/flowread.html', '_blank');
-    return;
+  text=text.replace(/\s+/g,' ').trim();
+  if(!text||text.split(' ').length<20){window.open('/tools/flowread.html','_blank');return;}
+  try{
+    sessionStorage.setItem('flowread_article',text);
+    window.open('/tools/flowread.html','_blank');
+  }catch(e){
+    window.open('/tools/flowread.html?article='+encodeURIComponent(text.substring(0,3000)),'_blank');
   }
-
-  // Pass article text to FlowRead via URL param
-  const encoded = encodeURIComponent(text);
-  // Split into chunks if too long for URL (max ~8000 chars)
-  const maxLen = 8000;
-  const truncated = encoded.length > maxLen ? encoded.substring(0, maxLen) : encoded;
-  window.open('/tools/flowread.html?article=' + truncated, '_blank');
 }
 </script>
 
-  <div class="article-meta">
+<div class="article-meta">
     <div class="article-category">Health Results Monday — Session Notes</div>
     <h1>First Principles of Health:<br>What's Actually Making You Sick</h1>
     <p class="article-subtitle">
