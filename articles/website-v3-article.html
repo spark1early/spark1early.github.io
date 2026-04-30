@@ -252,22 +252,28 @@ footer {
 <footer>© 2026 Spark1Early — Boston, MA · #humanmusic · #aiworkflow</footer>
 
 <script>
-function launchFlowRead() {
-  let text = '';
-  const titleEl = document.querySelector('.article-header h1');
-  if (titleEl) text += titleEl.textContent.trim() + '. ';
-  const bodyEls = document.querySelectorAll('.article-body p, .article-body h2, .article-body h3, .article-body li');
-  bodyEls.forEach(el => {
-    if (!el.closest('#frEmbedBlock')) {
-      const t = el.textContent.trim();
-      if (t.length > 10) text += t + ' ';
+function launchFlowRead(){
+  var text='';
+  var t=document.querySelector('h1');
+  if(t) text+=t.textContent.trim()+'. ';
+  var els=document.querySelectorAll('p,h2,h3,li');
+  els.forEach(function(el){
+    if(!el.closest('#frEmbedBlock')){
+      var s=el.textContent.trim();
+      if(s.length>10) text+=s+' ';
     }
   });
-  text = text.replace(/\s+/g, ' ').trim();
-  if (!text || text.split(' ').length < 20) { window.open('/tools/flowread.html', '_blank'); return; }
-  const encoded = encodeURIComponent(text);
-  const truncated = encoded.length > 8000 ? encoded.substring(0, 8000) : encoded;
-  window.open('/tools/flowread.html?article=' + truncated, '_blank');
+  text=text.replace(/\s+/g,' ').trim();
+  if(!text||text.split(' ').length<20){window.open('/tools/flowread.html','_blank');return;}
+  // Use sessionStorage — no URL length limit
+  try {
+    sessionStorage.setItem('flowread_article', text);
+    window.open('/tools/flowread.html','_blank');
+  } catch(e) {
+    // Fallback if sessionStorage blocked (e.g. private browsing)
+    var enc=encodeURIComponent(text.substring(0,3000));
+    window.open('/tools/flowread.html?article='+enc,'_blank');
+  }
 }
 </script>
 </body>
