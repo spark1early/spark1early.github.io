@@ -162,19 +162,24 @@ footer {
 </div>
 <script>
 function launchFlowRead(){
-  let text='';
-  const t=document.querySelector('h1');
+  var text='';
+  var t=document.querySelector('h1');
   if(t) text+=t.textContent.trim()+'. ';
-  document.querySelectorAll('p,h2,h3,li').forEach(el=>{
+  var els=document.querySelectorAll('p,h2,h3,li');
+  els.forEach(function(el){
     if(!el.closest('#frEmbedBlock')){
-      const s=el.textContent.trim();
+      var s=el.textContent.trim();
       if(s.length>10) text+=s+' ';
     }
   });
   text=text.replace(/\s+/g,' ').trim();
   if(!text||text.split(' ').length<20){window.open('/tools/flowread.html','_blank');return;}
-  const enc=encodeURIComponent(text);
-  window.open('/tools/flowread.html?article='+(enc.length>8000?enc.substring(0,8000):enc),'_blank');
+  try{
+    sessionStorage.setItem('flowread_article',text);
+    window.open('/tools/flowread.html','_blank');
+  }catch(e){
+    window.open('/tools/flowread.html?article='+encodeURIComponent(text.substring(0,3000)),'_blank');
+  }
 }
 </script>
 
