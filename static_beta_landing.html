@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Still Slaps Beta — Project Static</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{--bg:#0a0a0a;--fg:#f0f0f0;--red:#cc0000;--muted:rgba(240,240,240,0.45);--border:rgba(255,255,255,0.08);}
+body{background:var(--bg);color:var(--fg);font-family:'Instrument Sans',sans-serif;min-height:100vh;}
+.bar{background:var(--red);height:4px;width:100%;}
+header{padding:40px 40px 0;max-width:860px;margin:0 auto;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:0.06em;color:var(--fg);}
+.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-top:6px;}
+.hero{max-width:860px;margin:0 auto;padding:80px 40px 60px;}
+.badge{display:inline-block;background:rgba(204,0,0,0.12);border:1px solid var(--red);color:var(--red);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 14px;margin-bottom:32px;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,96px);line-height:0.92;letter-spacing:0.02em;margin-bottom:32px;}
+h1 span{color:var(--red);}
+.sub{font-size:18px;color:var(--muted);line-height:1.7;max-width:520px;margin-bottom:48px;}
+.mystery{background:#111;border:1px solid var(--border);border-left:3px solid var(--red);padding:28px 32px;margin-bottom:64px;max-width:600px;}
+.mystery p{font-size:15px;color:var(--muted);line-height:1.8;}
+.mystery strong{color:var(--fg);}
+.section{max-width:860px;margin:0 auto;padding:0 40px 80px;}
+.form-wrap{background:#111;border:1px solid var(--border);padding:48px;}
+.form-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:8px;}
+.form-wrap p{font-size:14px;color:var(--muted);margin-bottom:32px;}
+.form-row{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
+label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
+input,select,textarea{background:#0a0a0a;border:1px solid var(--border);color:var(--fg);font-family:'Instrument Sans',sans-serif;font-size:15px;padding:12px 16px;width:100%;outline:none;transition:border-color 0.2s;}
+input:focus,select:focus,textarea:focus{border-color:rgba(204,0,0,0.4);}
+select option{background:#111;}
+textarea{resize:vertical;min-height:80px;}
+.btn{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:16px 36px;border:none;cursor:pointer;transition:background 0.2s;margin-top:8px;}
+.btn:hover{background:#ff2222;}
+.divider{height:1px;background:var(--border);margin:0 40px;}
+footer{padding:32px 40px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);max-width:860px;margin:0 auto;}
+@media(max-width:600px){.hero,.section{padding-left:24px;padding-right:24px;}.form-wrap{padding:28px 24px;}}
+</style>
+</head>
+<body>
+<div class="bar"></div>
+
+<header>
+  <div class="logo">PROJECT STATIC</div>
+  <div class="tag">S1 Early Labs · Stealth Mode · Founding Testers</div>
+</header>
+
+<div class="hero">
+  <div class="badge">&#9679; Founding Tester Access — Invite Only</div>
+  <h1>Music culture.<br><span>Technology.</span><br>Something new.</h1>
+  <p class="sub">Project Static is something physical and digital at the same time. Built at the intersection of music culture and technology. Details come at launch. What we're looking for now: people who actually live in the culture.</p>
+
+  <div class="mystery">
+    <p>We're not going to tell you everything yet. <strong>That's intentional.</strong><br><br>
+    What we can say: if you're a music head, a gamer, a content creator — if you know the culture from the inside, not just as a spectator — this was built for you.<br><br>
+    Founding testers get first access, their name in the credits, and a direct line to the build team.</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section" style="padding-top:64px;">
+  <div class="form-wrap">
+    <h2>Apply — Founding Testers</h2>
+    <p>Limited spots. We want people who will actually use this and tell us the truth about it.</p>
+    <form action="https://formspree.io/f/xpwzgvkn" method="POST">
+      <div class="form-row"><label>Full Name</label><input type="text" name="name" placeholder="Your name" required></div>
+      <div class="form-row"><label>Email</label><input type="email" name="email" placeholder="your@email.com" required></div>
+      <div class="form-row"><label>Your main handles (social, streaming, etc.)</label><input type="text" name="handles" placeholder="@yourhandle on TikTok, Twitch, YouTube, IG..."></div>
+      <div class="form-row">
+        <label>How are you connected to the culture?</label>
+        <select name="role">
+          <option value="">Select one</option>
+          <option>Music fan / collector</option>
+          <option>Artist / producer / musician</option>
+          <option>Gaming / streaming content creator</option>
+          <option>DJ / event organizer</option>
+          <option>Music industry (label, promo, mgmt)</option>
+          <option>Multiple of the above</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label>What does music mean to you outside of just listening?</label>
+        <textarea name="music_relationship" placeholder="Tell us how deep the connection goes..." required></textarea>
+      </div>
+      <div class="form-row">
+        <label>How did you hear about Project Static?</label>
+        <input type="text" name="referral" placeholder="Person, platform, post...">
+      </div>
+      <div class="form-row">
+        <label>Anything you want to say? (optional)</label>
+        <textarea name="notes" placeholder="Say whatever you want."></textarea>
+      </div>
+      <input type="hidden" name="_subject" value="Project Static Founding Tester Application">
+      <button type="submit" class="btn">Apply as Founding Tester →</button>
+    </form>
+  </div>
+</div>
+
+<div class="divider"></div>
+<footer>© 2026 S1 Early Labs · Project Static · Trademark Pending · Confidential</footer>
+</body>
+</html>
