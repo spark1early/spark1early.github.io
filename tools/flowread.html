@@ -420,7 +420,7 @@ textarea::placeholder { color: var(--fg2); font-size: 0.8rem; }
   .header-links a:not(:first-child) { display: none; }
 }
 
-/* ── SECTION NAV (v1.7 restored) ── */
+/* ── SECTION NAV ── */
 .section-nav {
   width: 100%;
   background: var(--bg2);
@@ -491,7 +491,7 @@ textarea::placeholder { color: var(--fg2); font-size: 0.8rem; }
   </div>
 </header>
 
-<!-- SECTION NAV — load site content into reader (v1.7 restored) -->
+<!-- SECTION NAV — v1.7 restored -->
 <div class="section-nav" id="sectionNav">
   <span class="section-nav-label">↓ LOAD SECTION</span>
 </div>
@@ -595,15 +595,15 @@ function initAudio() {
 }
 
 
-// ─── SITE SECTIONS ─────────────────────────────────────────────
+// ─── SITE SECTIONS ────────────────────────────────────────
 const SITE_SECTIONS = [
   { label: 'INTRO', text: `Spark1Early. Boston, MA. Creator, Producer, Builder. Twenty years making music. Graphic design roots. Now building at the intersection of creativity and technology — independently, without permission. Also an AI consultant helping artists and businesses do the same.` },
-  { label: 'CRAFT', text: `The Craft. Producer. East Coast Hip-Hop, R and B, Trap Beats. Twenty years of building sounds from scratch. Sync placements on five major networks. Collaborations with artists who mean something. Designer. Visual Communications degree. Adobe Suite. Album covers, brand identity, visual storytelling — built with intention, not templates. Editor. Music videos, content, short-form. CapCut, Descript. Three YouTube channels. Builder. AI consultant. Automation architect. Building systems that do the work while you focus on what matters.` },
-  { label: 'MUSIC', text: `The Music. Independent since day one. Three albums. A catalog of collabs, beat tapes, and production work spanning two decades. No label. No team. Just the music. Sync placements through Jingle Punks. Collabs with Akrobatik and more. Production on ESPN, VICE, BET, MTV, and VH1. Road of a Titan Audible Imagery — Solo Album 2025. Bright Winter — Solo Album. Son of a Drummer — Solo Album 2023 Debut. Soul Purpose — w Yak Tzu. Early Chapters — w Arcaze Yak Tzu Ja Main. Still Got My Mask Vol 1 and 2 — Beat Tape. The Ketchup Packet — Compilation April 2026.` },
-  { label: 'PROJECTS', text: `The Projects. Project Static. Music culture meets technology. Something physical and digital at the same time. Trademark pending. More when it's ready. Project Signal. Built for independent artists and creators. The infrastructure you need without the gatekeepers you don't. Details on launch. FlowRead. You're reading with it right now. RSVP reading tool with BPM-synced real genre music. 6 genres 18 tracks v1.8 live now. Private Access. Built something that feels like it's from Back to the Future. Intelligence that most people don't have access to — until now.` },
+  { label: 'CRAFT', text: `The Craft. Producer. East Coast Hip-Hop, R and B, Trap Beats. Twenty years of building sounds from scratch. Sync placements on five major networks. Collaborations with artists who mean something. Designer. Visual Communications degree. Adobe Suite. Album covers, brand identity, visual storytelling. Editor. Music videos, content, short-form. CapCut, Descript. Three YouTube channels. Builder. AI consultant. Automation architect. Building systems that do the work while you focus on what matters.` },
+  { label: 'MUSIC', text: `The Music. Independent since day one. Three albums. A catalog spanning two decades. No label. No team. Just the music. Sync placements through Jingle Punks. Collabs with Akrobatik and more. Production on ESPN, VICE, BET, MTV, and VH1. Road of a Titan Audible Imagery — Solo Album 2025. Bright Winter — Solo Album. Son of a Drummer — Solo Album 2023 Debut. Soul Purpose — w Yak Tzu. Early Chapters — w Arcaze Yak Tzu Ja Main. Still Got My Mask Vol 1 and 2 — Beat Tape. The Ketchup Packet — Compilation April 2026.` },
+  { label: 'PROJECTS', text: `The Projects. Project Static. Music culture meets technology. Something physical and digital at the same time. Trademark pending. More when it is ready. Project Signal. Built for independent artists and creators. The infrastructure you need without the gatekeepers you don't. Details on launch. FlowRead. You're reading with it right now. RSVP reading tool with BPM-synced real genre music. 6 genres 18 tracks v1.8 live now. Private Access. Built something that feels like it's from Back to the Future. Intelligence that most people don't have access to — until now.` },
   { label: 'SERVICES', text: `Work With Me. Twenty years of creative work gave me a perspective most consultants don't have. First conversation is free. Artist Track. AI tools for music promotion content strategy streaming optimization and workflow. Four hundred to eight hundred dollars per month. Business Track. AI workflow automation for the repetitive work keeping you from your actual business. Six hundred to twelve hundred dollars per month. Product Build. You have an idea. I build it with AI. Concept to working prototype. Fifteen hundred to five thousand dollars per project. Bundle. Both tracks at a loyalty rate. Eight hundred to twelve hundred dollars per month.` },
-  { label: 'ARTICLES', text: `The Articles. First Principles of Health. Chronic inflammation toxic inputs nutrient deficiency — the root causes behind most major diseases. How to Use AI Efficiently. Tokens context hygiene model routing and the two-mode strategy. AI Music vs The Labels. Licensing talks stalled. Warner settled. Here's what every human artist needs to understand. How I Organize AI Sessions. A real folder system for running multiple projects with AI. FlowRead From a Group Chat to v1.7 in One Night. How a forwarded post and one build session created this tool. FlowRead v1.8 — Real Loops New Genres Full Sync. Six genres eighteen tracks built from original productions.` },
-  { label: 'CONTACT', text: `Let's Talk. Independent artist. AI consultant. Builder. First conversation is free. Instagram at spark1early. X Twitter at spark1early. TikTok at spark1early. Threads at spark1early. Bandcamp at spark1early. LinkedIn Bakari Spear. Email bspear dot music at gmail dot com. Boston MA. Human music. AI workflow.` }
+  { label: 'ARTICLES', text: `The Articles. First Principles of Health. Chronic inflammation toxic inputs nutrient deficiency — the root causes behind most major diseases. How to Use AI Efficiently. Tokens context hygiene model routing and the two-mode strategy. AI Music vs The Labels. Licensing talks stalled. Warner settled. What every human artist needs to understand. How I Organize AI Sessions. A real folder system for running multiple projects with AI. FlowRead From a Group Chat to v1.7 in One Night. How a forwarded post and one build session created this tool. FlowRead v1.8 — Real Loops New Genres Full Sync. Six genres eighteen tracks built from original productions.` },
+  { label: 'CONTACT', text: `Let's Talk. Independent artist. AI consultant. Builder. First conversation is free. Instagram at spark1early. X Twitter at spark1early. TikTok at spark1early. Threads at spark1early. Bandcamp at spark1early. LinkedIn Bakari Spear. Email bspear dot music at gmail dot com. Boston MA.` }
 ];
 
 function loadSection(text) {
@@ -648,21 +648,34 @@ function loadSection(text) {
   nav.appendChild(allBtn);
 })();
 
-// ─── ARTICLE LOADER — sessionStorage + URL param ─────────────────
+// ─── ARTICLE LOADER — handles BOTH plain string AND JSON format ────────
 (function loadArticleText() {
   let articleText = null;
   let articleLabel = 'ARTICLE';
+
+  // sessionStorage — handle plain string (articles write plain string)
+  // AND JSON format (fallback)
   try {
     const stored = sessionStorage.getItem('flowread_article');
     if (stored) {
-      const parsed = JSON.parse(stored);
-      if (parsed && parsed.text && parsed.text.split(' ').length > 10) {
-        articleText = parsed.text;
-        articleLabel = parsed.label || 'ARTICLE';
-        sessionStorage.removeItem('flowread_article');
+      sessionStorage.removeItem('flowread_article');
+      // Try JSON first
+      try {
+        const parsed = JSON.parse(stored);
+        if (parsed && parsed.text && parsed.text.split(' ').length > 10) {
+          articleText = parsed.text;
+          articleLabel = parsed.label || 'ARTICLE';
+        }
+      } catch(e) {
+        // Plain string (the format articles actually write)
+        if (stored.split(' ').length > 10) {
+          articleText = stored;
+        }
       }
     }
   } catch(e) {}
+
+  // URL param fallback
   if (!articleText) {
     try {
       const params = new URLSearchParams(window.location.search);
@@ -673,21 +686,26 @@ function loadSection(text) {
       }
     } catch(e) {}
   }
+
   if (!articleText) return;
+
   words = articleText.split(/\s+/).filter(w => w.length > 0);
   wordIndex = 0;
   updateCountDisplay();
   showWord(words[0] || '');
   document.getElementById('progressBar').style.width = '0%';
+
+  // Add ARTICLE button to section nav
   const nav = document.getElementById('sectionNav');
   if (nav) {
     const btn = document.createElement('button');
     btn.className = 'section-btn active';
     btn.innerHTML = articleLabel + '<span class="sec-words">' + words.length + ' words</span>';
+    const capturedText = articleText;
     btn.onclick = () => {
       document.querySelectorAll('.section-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      loadSection(articleText);
+      loadSection(capturedText);
     };
     const label = nav.querySelector('.section-nav-label');
     if (label && label.nextSibling) nav.insertBefore(btn, label.nextSibling);
@@ -695,7 +713,8 @@ function loadSection(text) {
   }
 })();
 
-// ─── STATE ───────────────────────────────────────────────────
+// ─── STATE ─────────────────────────────────────────────
+let loopLoading = false; // prevents overlapping audio loads──────
 let words = [];
 let wordIndex = 0;
 let wpm = 250;
@@ -740,6 +759,7 @@ let loopSource = null;
 let loopGain = null;
 
 async function loadLoop(genre, idx) {
+  const loadId = {}; loopLoading = loadId;
   const key = genre + idx;
   if (audioCache[key]) return audioCache[key];
   const file = LOOP_FILES[genre][idx];
@@ -773,6 +793,7 @@ async function playLoop(genre, idx) {
 }
 
 function stopLoop() {
+  loopLoading = false; // cancel any pending async load
   if (loopSource) { try { loopSource.stop(); } catch(e) {} loopSource = null; }
   if (loopGain)   { loopGain.disconnect(); loopGain = null; }
 }
@@ -1011,7 +1032,10 @@ function updateWPM(val) {
   wpm = parseInt(val);
   document.getElementById('wpmVal').textContent = wpm + ' WPM';
   updateCountDisplay();
-  if (isPlaying) { startReading(); updateLoopRate(); restartMusic(); }
+  if (isPlaying) {
+    startReading();
+    updateLoopRate(); // smoothly adjusts BPM via playbackRate — no restart needed
+  }
 }
 
 function updateFont(val) {
