@@ -420,7 +420,7 @@ textarea::placeholder { color: var(--fg2); font-size: 0.8rem; }
   .header-links a:not(:first-child) { display: none; }
 }
 
-/* ── SECTION NAV ── */
+/* ── SECTION NAV (v1.7 restored) ── */
 .section-nav {
   width: 100%;
   background: var(--bg2);
@@ -475,18 +475,23 @@ textarea::placeholder { color: var(--fg2); font-size: 0.8rem; }
 
 <!-- HEADER -->
 <header>
-  <div class="logo">
-    FLOW<span>READ</span>
-    <sub>v1.8</sub>
+  <div class="header-left" style="display:flex;align-items:baseline;gap:1rem;flex-wrap:wrap;">
+    <div class="logo">FLOW<span>READ</span> <sub style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--fg2);font-weight:400;">v1.8</sub></div>
+    <span style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--fg2);">RSVP · Music-Synced · Accessible</span>
   </div>
-  <div class="tagline">RSVP · Music-Synced · Accessible</div>
   <div class="header-links">
-    <a href="https://spark1early.github.io">← spark1early.github.io</a>
-    <a href="https://spark1early.github.io/articles/flowread-article.html">How It Was Built →</a>
+    <a href="https://spark1early.github.io/#craft">Craft</a>
+    <a href="https://spark1early.github.io/#music">Music</a>
+    <a href="https://spark1early.github.io/#visuals">Visuals</a>
+    <a href="https://spark1early.github.io/#projects">Projects</a>
+    <a href="https://spark1early.github.io/#services">Services</a>
+    <a href="https://spark1early.github.io/#articles">Articles</a>
+    <a href="https://spark1early.github.io/#contact">Contact</a>
+    <a href="https://spark1early.github.io" style="color:var(--red);">← Home</a>
   </div>
 </header>
 
-<!-- SECTION NAV — load site content into reader -->
+<!-- SECTION NAV — load site content into reader (v1.7 restored) -->
 <div class="section-nav" id="sectionNav">
   <span class="section-nav-label">↓ LOAD SECTION</span>
 </div>
@@ -590,15 +595,15 @@ function initAudio() {
 }
 
 
-// ─── SITE SECTIONS ─────────────────────────────────────────────────
+// ─── SITE SECTIONS ─────────────────────────────────────────────
 const SITE_SECTIONS = [
-  { label: 'INTRO', text: `Spark1Early. Boston, MA. Creator, Producer, Builder. Twenty years making music. Graphic design roots. Now building at the intersection of creativity and technology — independently, without permission. Also an AI consultant helping artists and businesses do the same. Twenty years producing. Five plus network placements. Three albums out.` },
-  { label: 'CRAFT', text: `The Craft. Producer. East Coast Hip-Hop, R and B, Trap Beats. Twenty years of building sounds from scratch. Sync placements on five major networks. Collaborations with artists who mean something. Designer. Visual Communications degree. Adobe Suite. Album covers, brand identity, and visual storytelling — built with intention, not templates. Editor. Music videos, content, short-form. CapCut, Descript. Three YouTube channels. Builder. AI consultant. Automation architect. Building systems that do the work while you focus on what matters. No dev team, no agency — just imagination and the right tools.` },
-  { label: 'MUSIC', text: `The Music. Independent since day one. Three albums. A catalog of collabs, beat tapes, and production work that spans two decades and several genres. No label. No team. Just the music. Sync placements through Jingle Punks. Collabs with Akrobatik and more. Production on ESPN, VICE, BET, MTV, and VH1. Road of a Titan Audible Imagery — Solo Album, 2025, Latest. Bright Winter — Solo Album. Son of a Drummer Road of a Titan — Solo Album, 2023, Debut. Soul Purpose — Collab with Yak Tzu. Early Chapters — Collab with Arcaze, Yak Tzu, Ja Main. Still Got My Mask Vol one and two — Beat Tape. The Ketchup Packet — Compilation, April 2026.` },
-  { label: 'PROJECTS', text: `The Projects. Project Static. Music culture meets technology. Something physical and digital at the same time. Trademark pending. More when it is ready. Project Signal. Built for independent artists and creators. The infrastructure you need without the gatekeepers you don't. Details on launch. FlowRead. You're reading with it right now. RSVP reading tool with BPM-synced real genre music. Six genres, eighteen tracks. v1.8 live now. Private Access. Built something that feels like it's from Back to the Future. Intelligence that most people don't have access to — until now.` },
-  { label: 'SERVICES', text: `Work With Me. Twenty years of creative work gave me a perspective most consultants don't have. I know what it costs to build something real. First conversation is free. Artist Track. AI tools for music promotion, content strategy, streaming optimization, and workflow. For independent artists ready to stop being invisible. Four hundred to eight hundred dollars per month. Business Track. AI workflow automation for the repetitive work keeping you from your actual business. Systems that run while you focus on growth. Six hundred to twelve hundred dollars per month. Product Build. You have an idea. I build it with AI. Concept to working prototype. Fifteen hundred to five thousand dollars per project. Bundle. Both tracks at a loyalty rate. Eight hundred to twelve hundred dollars per month.` },
-  { label: 'ARTICLES', text: `The Articles. First Principles of Health. Chronic inflammation, toxic inputs, nutrient deficiency — the root causes behind most major diseases. How to Use AI Efficiently. Tokens, context hygiene, model routing, and the two-mode strategy. AI Music vs The Labels. Licensing talks stalled. Warner settled. Here's what every human artist needs to understand. How I Organize AI Sessions. A real folder system for running multiple projects with AI. FlowRead From a Group Chat to v1.7 in One Night. How a forwarded post and one build session created this tool. FlowRead v1.8 — Real Loops, New Genres, Full Sync. Six genres, eighteen tracks built from original productions.` },
-  { label: 'CONTACT', text: `Let's Talk. Independent artist. AI consultant. Builder. If you want to connect, collaborate, or work together — first conversation is free. Instagram at spark1early. X Twitter at spark1early. TikTok at spark1early. Threads at spark1early. Bandcamp at spark1early. LinkedIn Bakari Spear. Email bspear dot music at gmail dot com. Boston, MA. Human music. AI workflow.` }
+  { label: 'INTRO', text: `Spark1Early. Boston, MA. Creator, Producer, Builder. Twenty years making music. Graphic design roots. Now building at the intersection of creativity and technology — independently, without permission. Also an AI consultant helping artists and businesses do the same.` },
+  { label: 'CRAFT', text: `The Craft. Producer. East Coast Hip-Hop, R and B, Trap Beats. Twenty years of building sounds from scratch. Sync placements on five major networks. Collaborations with artists who mean something. Designer. Visual Communications degree. Adobe Suite. Album covers, brand identity, visual storytelling — built with intention, not templates. Editor. Music videos, content, short-form. CapCut, Descript. Three YouTube channels. Builder. AI consultant. Automation architect. Building systems that do the work while you focus on what matters.` },
+  { label: 'MUSIC', text: `The Music. Independent since day one. Three albums. A catalog of collabs, beat tapes, and production work spanning two decades. No label. No team. Just the music. Sync placements through Jingle Punks. Collabs with Akrobatik and more. Production on ESPN, VICE, BET, MTV, and VH1. Road of a Titan Audible Imagery — Solo Album 2025. Bright Winter — Solo Album. Son of a Drummer — Solo Album 2023 Debut. Soul Purpose — w Yak Tzu. Early Chapters — w Arcaze Yak Tzu Ja Main. Still Got My Mask Vol 1 and 2 — Beat Tape. The Ketchup Packet — Compilation April 2026.` },
+  { label: 'PROJECTS', text: `The Projects. Project Static. Music culture meets technology. Something physical and digital at the same time. Trademark pending. More when it's ready. Project Signal. Built for independent artists and creators. The infrastructure you need without the gatekeepers you don't. Details on launch. FlowRead. You're reading with it right now. RSVP reading tool with BPM-synced real genre music. 6 genres 18 tracks v1.8 live now. Private Access. Built something that feels like it's from Back to the Future. Intelligence that most people don't have access to — until now.` },
+  { label: 'SERVICES', text: `Work With Me. Twenty years of creative work gave me a perspective most consultants don't have. First conversation is free. Artist Track. AI tools for music promotion content strategy streaming optimization and workflow. Four hundred to eight hundred dollars per month. Business Track. AI workflow automation for the repetitive work keeping you from your actual business. Six hundred to twelve hundred dollars per month. Product Build. You have an idea. I build it with AI. Concept to working prototype. Fifteen hundred to five thousand dollars per project. Bundle. Both tracks at a loyalty rate. Eight hundred to twelve hundred dollars per month.` },
+  { label: 'ARTICLES', text: `The Articles. First Principles of Health. Chronic inflammation toxic inputs nutrient deficiency — the root causes behind most major diseases. How to Use AI Efficiently. Tokens context hygiene model routing and the two-mode strategy. AI Music vs The Labels. Licensing talks stalled. Warner settled. Here's what every human artist needs to understand. How I Organize AI Sessions. A real folder system for running multiple projects with AI. FlowRead From a Group Chat to v1.7 in One Night. How a forwarded post and one build session created this tool. FlowRead v1.8 — Real Loops New Genres Full Sync. Six genres eighteen tracks built from original productions.` },
+  { label: 'CONTACT', text: `Let's Talk. Independent artist. AI consultant. Builder. First conversation is free. Instagram at spark1early. X Twitter at spark1early. TikTok at spark1early. Threads at spark1early. Bandcamp at spark1early. LinkedIn Bakari Spear. Email bspear dot music at gmail dot com. Boston MA. Human music. AI workflow.` }
 ];
 
 function loadSection(text) {
@@ -609,8 +614,7 @@ function loadSection(text) {
     clearTimeout(readTimer);
     stopMusic();
     const pb = document.getElementById('playBtn');
-    pb.innerHTML = '▶ PLAY';
-    pb.classList.remove('playing');
+    if (pb) { pb.innerHTML = '▶ PLAY'; pb.classList.remove('playing'); }
   }
   updateCountDisplay();
   showWord(words[0] || '');
@@ -642,6 +646,53 @@ function loadSection(text) {
     loadSection(allText);
   };
   nav.appendChild(allBtn);
+})();
+
+// ─── ARTICLE LOADER — sessionStorage + URL param ─────────────────
+(function loadArticleText() {
+  let articleText = null;
+  let articleLabel = 'ARTICLE';
+  try {
+    const stored = sessionStorage.getItem('flowread_article');
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      if (parsed && parsed.text && parsed.text.split(' ').length > 10) {
+        articleText = parsed.text;
+        articleLabel = parsed.label || 'ARTICLE';
+        sessionStorage.removeItem('flowread_article');
+      }
+    }
+  } catch(e) {}
+  if (!articleText) {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const param = params.get('article');
+      if (param) {
+        const decoded = decodeURIComponent(param);
+        if (decoded && decoded.split(' ').length > 10) articleText = decoded;
+      }
+    } catch(e) {}
+  }
+  if (!articleText) return;
+  words = articleText.split(/\s+/).filter(w => w.length > 0);
+  wordIndex = 0;
+  updateCountDisplay();
+  showWord(words[0] || '');
+  document.getElementById('progressBar').style.width = '0%';
+  const nav = document.getElementById('sectionNav');
+  if (nav) {
+    const btn = document.createElement('button');
+    btn.className = 'section-btn active';
+    btn.innerHTML = articleLabel + '<span class="sec-words">' + words.length + ' words</span>';
+    btn.onclick = () => {
+      document.querySelectorAll('.section-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadSection(articleText);
+    };
+    const label = nav.querySelector('.section-nav-label');
+    if (label && label.nextSibling) nav.insertBefore(btn, label.nextSibling);
+    else nav.appendChild(btn);
+  }
 })();
 
 // ─── STATE ───────────────────────────────────────────────────
