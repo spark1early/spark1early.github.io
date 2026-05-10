@@ -95,13 +95,12 @@ function launchFlowRead(){
     }
   });
   text=text.replace(/\s+/g,' ').trim();
-  if(!text||text.split(' ').length<20){window.open('/tools/flowread.html','_blank');return;}
-  try{
-    sessionStorage.setItem('flowread_article',text);
-    window.open('/tools/flowread.html','_blank');
-  }catch(e){
-    window.open('/tools/flowread.html?article='+encodeURIComponent(text.substring(0,3000)),'_blank');
+  if(!text||text.split(' ').length<20){
+    window.location.href='/tools/flowread.html';
+    return;
   }
+  try{ sessionStorage.setItem('flowread_article',text); }catch(e){}
+  window.location.href='/tools/flowread.html';
 }
 </script>
 

@@ -655,5 +655,27 @@ blockquote {
   </div>
 
 </div>
+
+<script>
+function launchFlowRead(){
+  var text='';
+  var t=document.querySelector('h1');
+  if(t) text+=t.textContent.trim()+'. ';
+  var els=document.querySelectorAll('p,h2,h3,li');
+  els.forEach(function(el){
+    if(!el.closest('.flowread-banner')&&!el.closest('nav')){
+      var s=el.textContent.trim();
+      if(s.length>10) text+=s+' ';
+    }
+  });
+  text=text.replace(/\s+/g,' ').trim();
+  if(!text||text.split(' ').length<20){
+    window.location.href='https://spark1early.github.io/tools/flowread.html';
+    return;
+  }
+  try{ sessionStorage.setItem('flowread_article',text); }catch(e){}
+  window.location.href='https://spark1early.github.io/tools/flowread.html';
+}
+</script>
 </body>
 </html>
