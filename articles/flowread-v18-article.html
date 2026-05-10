@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowRead v1.8: Real Loops, New Genres, Full Sync — Spark1Early</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0a0a0a;
+  --bg2: #111111;
+  --fg: #f0f0f0;
+  --fg2: #999999;
+  --red: #cc0000;
+  --red2: #ff2222;
+  --border: #222222;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Instrument Sans', sans-serif;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+/* NAV */
+.top-nav {
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  background: rgba(10,10,10,0.97);
+  backdrop-filter: blur(12px);
+  z-index: 100;
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.nav-logo span { color: var(--red); }
+
+.nav-back {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav-back:hover { color: var(--red); }
+
+/* ARTICLE WRAPPER */
+.article-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 64px 24px 120px;
+}
+
+/* META */
+.article-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  margin-bottom: 24px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.article-meta span { color: var(--red); }
+
+/* HEADLINE */
+h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 8vw, 76px);
+  line-height: 0.95;
+  letter-spacing: 0.02em;
+  margin-bottom: 28px;
+  color: var(--fg);
+}
+
+h1 em {
+  color: var(--red);
+  font-style: normal;
+}
+
+/* BYLINE */
+.byline {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--fg2);
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* FLOWREAD CTA BANNER */
+.flowread-banner {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--red);
+  padding: 18px 24px;
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.banner-text {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  line-height: 1.8;
+}
+
+.banner-text strong { color: var(--fg); display: block; margin-bottom: 2px; }
+
+.banner-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  padding: 8px 18px;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.banner-link:hover { border-color: var(--red); color: var(--red); }
+
+/* BODY COPY */
+p {
+  font-size: 1rem;
+  color: var(--fg);
+  margin-bottom: 24px;
+  max-width: 66ch;
+}
+
+p strong { color: var(--fg); font-weight: 600; }
+
+/* HEADINGS */
+h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(24px, 4vw, 36px);
+  letter-spacing: 0.05em;
+  color: var(--fg);
+  margin: 56px 0 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+h3 {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin: 32px 0 12px;
+}
+
+/* GENRE TABLE */
+.genre-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0 32px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+}
+
+.genre-table th {
+  text-align: left;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg2);
+  padding: 8px 16px 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-weight: 500;
+}
+
+.genre-table td {
+  padding: 10px 16px 10px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--fg);
+  vertical-align: top;
+  line-height: 1.6;
+}
+
+.genre-table td:first-child { color: var(--red); font-weight: 500; white-space: nowrap; }
+.genre-table tr:last-child td { border-bottom: none; }
+
+/* STAT STRIP */
+.stat-strip {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  margin: 32px 0;
+  overflow: hidden;
+}
+
+.stat {
+  flex: 1;
+  padding: 20px;
+  border-right: 1px solid var(--border);
+  text-align: center;
+}
+
+.stat:last-child { border-right: none; }
+
+.stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 36px;
+  color: var(--red);
+  line-height: 1;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--fg2);
+}
+
+/* CHANGELOG */
+.changelog {
+  margin: 24px 0 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.log-entry {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border);
+  border-bottom: none;
+}
+
+.log-entry:last-child { border-bottom: 1px solid var(--border); }
+
+.log-ver {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.05em;
+  color: var(--red);
+  padding: 16px 20px;
+  border-right: 1px solid var(--border);
+  min-width: 72px;
+  display: flex;
+  align-items: flex-start;
+  background: var(--bg2);
+}
+
+.log-body {
+  padding: 16px 20px;
+  flex: 1;
+}
+
+.log-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.log-desc {
+  font-size: 0.85rem;
+  color: var(--fg2);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* BETA CTA */
+.beta-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  padding: 32px;
+  margin: 48px 0;
+}
+
+.beta-block h3 {
+  margin: 0 0 10px;
+}
+
+.beta-block p {
+  margin-bottom: 20px;
+  color: var(--fg2);
+  font-size: 0.9rem;
+}
+
+.beta-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-red {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: var(--red);
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 22px;
+  transition: background 0.2s;
+}
+
+.btn-red:hover { background: var(--red2); }
+
+.btn-ghost {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: transparent;
+  color: var(--fg2);
+  text-decoration: none;
+  padding: 10px 22px;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+}
+
+.btn-ghost:hover { border-color: var(--red); color: var(--red); }
+
+/* FOOTER */
+.article-footer {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  color: var(--fg2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: gap;
+  gap: 12px;
+}
+
+.article-footer a {
+  color: var(--fg2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.article-footer a:hover { color: var(--red); }
+
+/* PULLQUOTE */
+blockquote {
+  border-left: 2px solid var(--red);
+  margin: 32px 0;
+  padding: 4px 0 4px 24px;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 1.1rem;
+  font-style: italic;
+  color: var(--fg2);
+  max-width: 56ch;
+}
+
+@media (max-width: 600px) {
+  .top-nav { padding: 0 16px; }
+  .article-wrap { padding: 40px 16px 80px; }
+  .stat-strip { flex-direction: column; }
+  .stat { border-right: none; border-bottom: 1px solid var(--border); }
+  .stat:last-child { border-bottom: none; }
+  .flowread-banner { flex-direction: column; align-items: flex-start; }
+  .log-entry { flex-direction: column; }
+  .log-ver { border-right: none; border-bottom: 1px solid var(--border); min-width: unset; padding: 10px 20px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="https://spark1early.github.io" class="nav-logo">SPARK<span>1</span>EARLY</a>
+  <a href="https://spark1early.github.io" class="nav-back">← spark1early.github.io</a>
+</nav>
+
+<div class="article-wrap">
+
+  <div class="article-meta">
+    <span>Tools</span> · Reading · AI Build · <span>May 2026</span>
+  </div>
+
+  <h1>FLOWREAD <em>V1.8</em><br>REAL LOOPS.<br>NEW GENRES.<br>FULL SYNC.</h1>
+
+  <div class="byline">Spark1Early · May 2026 · 5 min read</div>
+
+  <div class="flowread-banner">
+    <div class="banner-text">
+      <strong>▶ Read this article with FlowRead</strong>
+      RSVP reader · Real genre music · BPM-synced · 60–800 WPM
+    </div>
+    <a href="https://spark1early.github.io/tools/flowread.html" class="banner-link">Open in FlowRead →</a>
+  </div>
+
+  <p>
+    V1.7 shipped real audio loops for the first time — actual recorded music instead of synthesized Web Audio oscillators. That was a big jump. V1.8 takes everything built in v1.7 and expands it: more genres, more loop options per genre, deeper BPM sync, and a full engine rebuild under the hood to make it all work cleanly together.
+  </p>
+
+  <p>
+    Here's what changed, why it changed, and what to try first.
+  </p>
+
+  <h2>THE GENRE OVERHAUL</h2>
+
+  <p>
+    V1.7 shipped with 7 genres drawing from a handful of single loops each. V1.8 restructures this entirely. Six genres, three loops each — <strong>18 total combinations</strong>, with one selected randomly every session. Same genre, different feel every time you hit play.
+  </p>
+
+  <div class="stat-strip">
+    <div class="stat">
+      <span class="stat-num">6</span>
+      <span class="stat-label">Genres</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">3</span>
+      <span class="stat-label">Loops Each</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">18</span>
+      <span class="stat-label">Total Combos</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">0.38</span>
+      <span class="stat-label">BPM/WPM Ratio</span>
+    </div>
+  </div>
+
+  <p>The genre list was also reorganized. Percussion and Big Band Swing are out. Piano, Ambient, and Electro Wave are in. The lineup now:</p>
+
+  <table class="genre-table">
+    <thead>
+      <tr>
+        <th>Genre</th>
+        <th>BPMs (Loop 1 / 2 / 3)</th>
+        <th>Character</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Jazz</td>
+        <td>100 / 100 / 129</td>
+        <td>Walking bass, real horns, head arrangements</td>
+      </tr>
+      <tr>
+        <td>Orchestral</td>
+        <td>115 / 135 / 120</td>
+        <td>String sections, swelling dynamics, cinematic feel</td>
+      </tr>
+      <tr>
+        <td>Lo-Fi</td>
+        <td>95 / 90 / 90</td>
+        <td>Dusty drums, warm chords, background noise</td>
+      </tr>
+      <tr>
+        <td>Piano</td>
+        <td>115 / 104 / 120</td>
+        <td>Solo or light accompaniment, melodic, clean</td>
+      </tr>
+      <tr>
+        <td>Ambient</td>
+        <td>108 / 105 / 120</td>
+        <td>Wide pads, slow motion, minimal pulse</td>
+      </tr>
+      <tr>
+        <td>Electro Wave</td>
+        <td>120 / 75 / 90</td>
+        <td>Synth-driven, rhythmic, forward motion</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>HOW THE BPM SYNC WORKS NOW</h2>
+
+  <p>
+    The core formula hasn't changed: <strong>BPM = WPM × 0.38</strong>. At 250 WPM you get roughly 95 BPM. At 400 WPM you're at 152 BPM. The music tempo always mirrors the reading tempo.
+  </p>
+
+  <p>
+    What's new in v1.8 is how that sync is applied to real audio files. Each loop has a native BPM — the tempo it was recorded at. The engine stores that BPM in a lookup table, then uses the Web Audio API's <strong>playbackRate</strong> to stretch or compress the audio in real time as you move the WPM slider. The music speeds up and slows down without pitch-shifting. It sounds natural because the underlying audio is real recordings, not synthesized tones.
+  </p>
+
+  <blockquote>
+    "The rhythm anchors your attention the same way a metronome anchors a musician — except the tempo is set by how fast you read."
+  </blockquote>
+
+  <p>
+    If a loop file isn't found — say you're running FlowRead locally without the audio folder — the engine silently falls back to the Web Audio synthesizer. You always get music. The experience degrades gracefully rather than breaking.
+  </p>
+
+  <h2>PUNCTUATION PACING — NOW WITH ALPHANUMERICS</h2>
+
+  <p>
+    V1.7 introduced punctuation-aware reading delays. V1.8 adds one more rule: <strong>alphanumeric tokens</strong> — words like P90X, 401k, or Step3 — get a slight processing beat (1.1× base delay). These tokens don't read the same way regular words do, so they shouldn't pace the same way either.
+  </p>
+
+  <p>The full pacing table, from longest pause to shortest:</p>
+
+  <table class="genre-table">
+    <thead>
+      <tr><th>Pattern</th><th>Multiplier</th><th>Feel</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>… ellipsis</td><td>3.2×</td><td>Long trailing thought</td></tr>
+      <tr><td>. ! ?</td><td>2.8×</td><td>Full sentence breath</td></tr>
+      <tr><td>— : –</td><td>2.0×</td><td>Strong pause, reveal</td></tr>
+      <tr><td>;</td><td>1.8×</td><td>Between comma and period</td></tr>
+      <tr><td>10+ character words</td><td>1.15×</td><td>Processing time</td></tr>
+      <tr><td>Alphanumeric tokens</td><td>1.1×</td><td>Mixed character beat</td></tr>
+      <tr><td>, ) " '</td><td>1.4×</td><td>Short breath</td></tr>
+      <tr><td>( opening quote</td><td>1.2×</td><td>Anticipation</td></tr>
+      <tr><td>Hyphenated words</td><td>0.9×</td><td>Linked, faster</td></tr>
+      <tr><td>Everything else</td><td>1.0×</td><td>Base WPM pace</td></tr>
+    </tbody>
+  </table>
+
+  <h2>UNDER THE HOOD</h2>
+
+  <h3>Mobile Font Slider Fix</h3>
+  <p>
+    The font size slider wasn't firing on mobile browsers — a known issue where touch events don't always trigger <code>oninput</code>. Fixed in v1.8 by adding <code>ontouchmove</code> and <code>onchange</code> events alongside it. The font size also now uses CSS <code>clamp()</code> so it scales proportionally to screen width before the slider is even touched.
+  </p>
+
+  <h3>ORP Centering</h3>
+  <p>
+    The gold highlight letter — the Optimal Recognition Point — is now properly centered using a three-column flex layout. Text before it right-aligns to center. The ORP letter sits fixed at the midpoint. Text after it extends right. Short words and long words all anchor to the same spot. This is how the technique is supposed to work.
+  </p>
+
+  <h3>Theme Sync</h3>
+  <p>
+    V1.8 is rebuilt on the same design system as spark1early.github.io — Bebas Neue, Instrument Sans, DM Mono, the same red/black/white palette, same border logic and spacing. FlowRead now feels like part of the site instead of a standalone tool bolted on.
+  </p>
+
+  <!-- BETA CTA -->
+  <div class="beta-block">
+    <h3>V1.8 BETA — TRY IT FIRST</h3>
+    <p>
+      V1.8 is in beta before the full site rollout. Try it, break it, and send feedback. What genres are you using most? What's the WPM you settle into? Any loops that feel off-tempo? The beta link is live in the repo now.
+    </p>
+    <div class="beta-links">
+      <a href="https://spark1early.github.io/flowread-beta.html" class="btn-red">Try v1.8 Beta →</a>
+      <a href="https://spark1early.github.io/tools/flowread.html" class="btn-ghost">Current v1.7 →</a>
+    </div>
+  </div>
+
+  <h2>VERSION HISTORY</h2>
+
+  <div class="changelog">
+    <div class="log-entry">
+      <div class="log-ver">V1.8</div>
+      <div class="log-body">
+        <div class="log-title">Genre overhaul + full engine rebuild — current beta</div>
+        <p class="log-desc">6 genres × 3 loops = 18 combinations, random per session. New genres: Piano, Ambient, Electro Wave. Removed: Percussion, Big Band Swing. BPM lookup table with live playbackRate sync. Alphanumeric pause added. Mobile font slider fixed. ORP centering rebuilt. Full theme sync with spark1early.github.io.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.7</div>
+      <div class="log-body">
+        <div class="log-title">Real recorded audio loops — previous live version</div>
+        <p class="log-desc">Replaced all synthesized instruments with real recorded loops. Jazz sounds like jazz. Lo-fi sounds like lo-fi. BPM sync via Web Audio API playbackRate. Pre-loads all genres after first play. 7 genres: Swing Jazz, Lo-Fi, Orchestral, Theta Ambient, Solo Piano, Big Band Swing, Percussion.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.6</div>
+      <div class="log-body">
+        <div class="log-title">Back to Web Audio — fixed melodic sequences</div>
+        <p class="log-desc">Returned to stateless Web Audio API after Tone.js rollback. Replaced random notes with fixed melodic sequences per genre. MELODIES, BASSLINES, and CHORDS tables. Theta Ambient fixed — faster attack so it's audible. Instant genre switching with no transport restart.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.5</div>
+      <div class="log-body">
+        <div class="log-title">Tone.js upgrade — rolled back</div>
+        <p class="log-desc">Attempted Tone.js for realistic synthesis — PolySynth piano, MembraneSynth drums, MetalSynth cymbals, Reverb/Chorus effects. Mobile AudioContext suspension caused music to stop on genre switch and WPM change. Rolled back to Web Audio.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.4</div>
+      <div class="log-body">
+        <div class="log-title">Better synthesis + article integration</div>
+        <p class="log-desc">New instrument-specific synth functions: piano(), bass(), brass(), pad(), drone(). Swing jazz hihat fix with proper triplet grid. Article page integration via ?article= URL parameter.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.3</div>
+      <div class="log-body">
+        <div class="log-title">8 genres</div>
+        <p class="log-desc">Expanded from 4 to 8 genres. Added Theta Ambient, Solo Piano, Big Band Swing, and Percussion. Freemium model confirmed.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.2</div>
+      <div class="log-body">
+        <div class="log-title">Hardcoded and working</div>
+        <p class="log-desc">Scrapped cross-origin site detection. Hardcoded all 7 site sections and Spark1Early theme directly. Deployed live at spark1early.github.io/tools/flowread.html.</p>
+      </div>
+    </div>
+    <div class="log-entry">
+      <div class="log-ver">V1.0</div>
+      <div class="log-body">
+        <div class="log-title">The original build</div>
+        <p class="log-desc">Basic RSVP reader. BPM-synced generative music via Web Audio API. 4 genres: Jazz, Orchestral, Lo-Fi, Percussion. ORP highlighting. Punctuation-aware pacing. Single HTML file, zero dependencies.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>
+    V1.8 goes live to the main tools page once the beta feedback loop closes. Try the beta, use it on something real — an article, a chapter, something long — and see where the experience breaks down. That's what the beta is for.
+  </p>
+
+  <p>
+    — Spark1Early · Boston, MA · 2026
+  </p>
+
+  <div class="article-footer">
+    <span>© 2026 Spark1Early — Boston, MA · #humanmusic · #aiworkflow</span>
+    <a href="https://spark1early.github.io">← Back to site</a>
+  </div>
+
+</div>
+</body>
+</html>
