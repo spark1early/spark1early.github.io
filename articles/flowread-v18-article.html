@@ -62,18 +62,6 @@ body {
 }
 
 .nav-back:hover { color: var(--red); }
-.nav-links { display: flex; align-items: center; gap: 24px; list-style: none; }
-.nav-links a {
-  font-family: 'DM Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--fg2);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.nav-links a:hover { color: var(--red); }
-@media (max-width: 600px) { .nav-links { display: none; } }
 
 /* ARTICLE WRAPPER */
 .article-wrap {
@@ -416,16 +404,7 @@ blockquote {
 
 <nav class="top-nav">
   <a href="https://spark1early.github.io" class="nav-logo">SPARK<span>1</span>EARLY</a>
-  <ul class="nav-links">
-    <li><a href="https://spark1early.github.io/#craft">Craft</a></li>
-    <li><a href="https://spark1early.github.io/#music">Music</a></li>
-    <li><a href="https://spark1early.github.io/#visuals">Visuals</a></li>
-    <li><a href="https://spark1early.github.io/#projects">Projects</a></li>
-    <li><a href="https://spark1early.github.io/#services">Services</a></li>
-    <li><a href="https://spark1early.github.io/#articles">Articles</a></li>
-    <li><a href="https://spark1early.github.io/#contact">Contact</a></li>
-  </ul>
-  <a href="https://spark1early.github.io" class="nav-back">← Home</a>
+  <a href="https://spark1early.github.io" class="nav-back">← spark1early.github.io</a>
 </nav>
 
 <div class="article-wrap">
@@ -443,7 +422,12 @@ blockquote {
       <strong>▶ Read this article with FlowRead</strong>
       RSVP reader · Real genre music · BPM-synced · 60–800 WPM
     </div>
-    <a href="https://spark1early.github.io/tools/flowread.html" class="banner-link">Open in FlowRead →</a>
+    <a href="https://spark1early.github.io/tools/flowread.html" class="banner-link" onclick="
+  try {
+    var text = document.querySelector('.article-wrap') ? document.querySelector('.article-wrap').innerText : document.body.innerText;
+    sessionStorage.setItem('flowread_article', JSON.stringify({text: text, label: 'V1.8 ARTICLE'}));
+  } catch(e) {}
+">Open in FlowRead →</a>
   </div>
 
   <p>
