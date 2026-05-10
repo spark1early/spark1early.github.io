@@ -111,6 +111,15 @@ h1 em {
   border-bottom: 1px solid var(--border);
 }
 
+/* FR-EMBED BLOCK — same as working articles */
+.fr-embed{background:#0a0a0a;border:1px solid rgba(255,255,255,0.08);padding:20px 24px;margin:0 0 40px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.fr-embed-left{display:flex;flex-direction:column;gap:4px;}
+.fr-embed-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:#cc0000;}
+.fr-embed-title{font-size:18px;letter-spacing:0.04em;color:#f0f0f0;font-weight:700;}
+.fr-embed-sub{font-size:12px;color:rgba(240,240,240,0.4);}
+.fr-embed-btn{background:#cc0000;color:#fff;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;border:none;cursor:pointer;transition:background 0.2s;white-space:nowrap;}
+.fr-embed-btn:hover{background:#ff2222;}
+
 /* FLOWREAD CTA BANNER */
 .flowread-banner {
   background: var(--bg2);
@@ -417,18 +426,36 @@ blockquote {
 
   <div class="byline">Spark1Early · May 2026 · 5 min read</div>
 
-  <div class="flowread-banner">
-    <div class="banner-text">
-      <strong>▶ Read this article with FlowRead</strong>
-      RSVP reader · Real genre music · BPM-synced · 60–800 WPM
+  <div class="fr-embed" id="frEmbedBlock">
+    <div class="fr-embed-left">
+      <span class="fr-embed-tag">▶ FlowRead v1.8</span>
+      <span class="fr-embed-title">READ THIS ARTICLE WITH FLOWREAD</span>
+      <span class="fr-embed-sub">RSVP reader · Real genre music · BPM-synced · 60–800 WPM</span>
     </div>
-    <a href="https://spark1early.github.io/tools/flowread.html" class="banner-link" onclick="
-  try {
-    var text = document.querySelector('.article-wrap') ? document.querySelector('.article-wrap').innerText : document.body.innerText;
-    sessionStorage.setItem('flowread_article', JSON.stringify({text: text, label: 'V1.8 ARTICLE'}));
-  } catch(e) {}
-">Open in FlowRead →</a>
+    <button class="fr-embed-btn" onclick="launchFlowRead()">Open in FlowRead →</button>
   </div>
+  <script>
+  function launchFlowRead(){
+    var text='';
+    var t=document.querySelector('h1');
+    if(t) text+=t.textContent.trim()+'. ';
+    var els=document.querySelectorAll('p,h2,h3,li');
+    els.forEach(function(el){
+      if(!el.closest('#frEmbedBlock')){
+        var s=el.textContent.trim();
+        if(s.length>10) text+=s+' ';
+      }
+    });
+    text=text.replace(/\s+/g,' ').trim();
+    if(!text||text.split(' ').length<20){window.open('https://spark1early.github.io/tools/flowread.html','_blank');return;}
+    try{
+      sessionStorage.setItem('flowread_article',text);
+      window.open('https://spark1early.github.io/tools/flowread.html','_blank');
+    }catch(e){
+      window.open('https://spark1early.github.io/tools/flowread.html?article='+encodeURIComponent(text.substring(0,3000)),'_blank');
+    }
+  }
+  </script>
 
   <p>
     V1.7 shipped real audio loops for the first time — actual recorded music instead of synthesized Web Audio oscillators. That was a big jump. V1.8 takes everything built in v1.7 and expands it: more genres, more loop options per genre, deeper BPM sync, and a full engine rebuild under the hood to make it all work cleanly together.
