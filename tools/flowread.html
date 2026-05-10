@@ -1040,16 +1040,6 @@ updateCountDisplay();
   }
   if (!articleText) return;
 
-  // Clean raw text — strip HTML tags, CSS brackets, code artifacts
-  articleText = articleText
-    .replace(/<[^>]*>/g, ' ')           // strip any HTML tags
-    .replace(/\{[^}]*\}/g, ' ')         // strip CSS/code blocks { }
-    .replace(/\[[^\]]*\]/g, ' ')        // strip bracket notation [ ]
-    .replace(/https?:\/\/\S+/g, ' ')    // strip URLs
-    .replace(/[^\w\s'''\-\.\,\!\?\:\;]/g, ' ') // strip special chars
-    .replace(/\s+/g, ' ')               // collapse whitespace
-    .trim();
-
   words = articleText.split(/\s+/).filter(w => w.length > 0);
   wordIndex = 0;
   updateCountDisplay();
