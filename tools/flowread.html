@@ -482,6 +482,40 @@ textarea::placeholder { color: var(--fg2); font-size: 0.8rem; }
 .section-btn.active { color: var(--red); border-bottom-color: var(--red); background: var(--bg3); }
 .sec-words { font-size: 8px; color: var(--fg2); opacity: 0.5; }
 
+
+/* ── FEEDBACK BUTTON ── */
+.feedback-bar {
+  text-align: center;
+  padding: 20px 0 8px;
+  border-top: 1px solid var(--border);
+  margin-top: 8px;
+}
+.feedback-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg2);
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.feedback-btn:hover { border-color: var(--red); color: var(--red); }
+.feedback-note {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--fg2);
+  opacity: 0.45;
+  margin-top: 8px;
+  letter-spacing: 0.06em;
+}
+
 </style>
 </head>
 <body>
@@ -592,6 +626,14 @@ textarea::placeholder { color: var(--fg2); font-size: 0.8rem; }
     </div>
   </div>
 
+  <!-- FEEDBACK -->
+  <div class="feedback-bar">
+    <a href="https://spark1early.github.io/flowread-beta.html" class="feedback-btn" target="_blank">
+      ✶ Share Feedback on the Beta →
+    </a>
+    <div class="feedback-note">Open beta · All genres free · v1.8</div>
+  </div>
+
 </div>
 
 <script>
@@ -615,7 +657,7 @@ const SITE_SECTIONS = [
   { label: 'INTRO', text: `Spark1Early. Boston, MA. Creator, Producer, Builder. Twenty years making music. Graphic design roots. Now building at the intersection of creativity and technology — independently, without permission. Also an AI consultant helping artists and businesses do the same.` },
   { label: 'CRAFT', text: `The Craft. Producer. East Coast Hip-Hop, R and B, Trap Beats. Twenty years of building sounds from scratch. Sync placements on five major networks. Collaborations with artists who mean something. Designer. Visual Communications degree. Adobe Suite. Album covers, brand identity, visual storytelling. Editor. Music videos, content, short-form. CapCut, Descript. Three YouTube channels. Builder. AI consultant. Automation architect. Building systems that do the work while you focus on what matters.` },
   { label: 'MUSIC', text: `The Music. Independent since day one. Three albums. A catalog spanning two decades. No label. No team. Just the music. Sync placements through Jingle Punks. Collabs with Akrobatik and more. Production on ESPN, VICE, BET, MTV, and VH1. Road of a Titan Audible Imagery — Solo Album 2025. Bright Winter — Solo Album. Son of a Drummer — Solo Album 2023 Debut. Soul Purpose with Yak Tzu. Early Chapters with Arcaze, Yak Tzu, Ja Main. Still Got My Mask Vol 1 and 2 — Beat Tape. The Ketchup Packet — Compilation April 2026.` },
-  { label: 'PROJECTS', text: `The Projects. Project Static. Music culture meets technology. Something physical and digital at the same time. Trademark pending. More when it is ready. Project Signal. Built for independent artists and creators. The infrastructure you need without the gatekeepers you don't. Details on launch. FlowRead. You are reading with it right now. RSVP reading tool with BPM-synced real genre music. Six genres, eighteen tracks. v1.8 live now. Private Access. Built something that feels like it is from Back to the Future. Intelligence that most people don't have access to — until now.` },
+  { label: 'PROJECTS', text: `The Projects. Project Static. Music culture meets technology. Something physical and digital at the same time. Trademark pending. More when it is ready. Project Signal. Built for independent artists and creators. The infrastructure you need without the gatekeepers you don't. Details on launch. FlowRead. You are reading with it right now. RSVP reading tool with BPM-synced real genre music. Six genres, eighteen tracks. v1.8 live now.` },
   { label: 'SERVICES', text: `Work With Me. Twenty years of creative work gave me a perspective most consultants don't have. First conversation is free. Artist Track. AI tools for music promotion, content strategy, streaming optimization, and workflow. Four hundred to eight hundred dollars per month. Business Track. AI workflow automation for the repetitive work keeping you from your actual business. Six hundred to twelve hundred dollars per month. Product Build. You have an idea. I build it with AI. Concept to working prototype. Fifteen hundred to five thousand dollars per project. Bundle. Both tracks at a loyalty rate. Eight hundred to twelve hundred dollars per month.` },
   { label: 'ARTICLES', text: `The Articles. First Principles of Health. Chronic inflammation, toxic inputs, nutrient deficiency — the root causes behind most major diseases. How to Use AI Efficiently. Tokens, context hygiene, model routing, and the two-mode strategy. AI Music vs The Labels. Licensing talks stalled. Warner settled. What every human artist needs to understand. How I Organize AI Sessions. A real folder system for running multiple projects with AI. FlowRead From a Group Chat to v1.7 in One Night. How a forwarded post and one build session created this tool. FlowRead v1.8 — Real Loops, New Genres, Full Sync. Six genres, eighteen tracks built from original productions.` },
   { label: 'CONTACT', text: `Let's Talk. Independent artist. AI consultant. Builder. First conversation is free. Instagram at spark1early. X Twitter at spark1early. TikTok at spark1early. Threads at spark1early. Bandcamp at spark1early. LinkedIn Bakari Spear. Email bspear dot music at gmail dot com. Boston MA.` }
