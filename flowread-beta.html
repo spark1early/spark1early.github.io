@@ -6,60 +6,150 @@
 <title>FlowRead Beta — Read Faster. Focus Deeper.</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{--bg:#0a0a0a;--fg:#f0f0f0;--red:#cc0000;--muted:rgba(240,240,240,0.45);--border:rgba(255,255,255,0.08);}
-body{background:var(--bg);color:var(--fg);font-family:'Instrument Sans',sans-serif;min-height:100vh;}
-.bar{background:var(--red);height:4px;width:100%;}
-header{padding:40px 40px 0;max-width:860px;margin:0 auto;}
-.logo{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:0.06em;color:var(--red);}
-.tag{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;margin-top:6px;}
-.hero{max-width:860px;margin:0 auto;padding:80px 40px 60px;}
-.badge{display:inline-block;background:rgba(204,0,0,0.12);border:1px solid var(--red);color:var(--red);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;padding:6px 14px;margin-bottom:32px;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,8vw,96px);line-height:0.92;letter-spacing:0.02em;margin-bottom:32px;}
-h1 span{color:var(--red);}
-.sub{font-size:18px;color:var(--muted);line-height:1.7;max-width:540px;margin-bottom:48px;}
-.stats{display:flex;gap:48px;margin-bottom:64px;flex-wrap:wrap;}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--red);line-height:1;}
-.stat-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;color:var(--muted);text-transform:uppercase;margin-top:4px;}
-.section{max-width:860px;margin:0 auto;padding:0 40px 80px;}
-.section-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.2em;color:var(--red);text-transform:uppercase;margin-bottom:24px;}
-.features{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:1px;background:var(--border);margin-bottom:64px;}
-.feat{background:var(--bg);padding:28px 24px;}
-.feat-icon{font-size:24px;margin-bottom:12px;}
-.feat-title{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:var(--fg);margin-bottom:8px;}
-.feat-desc{font-size:14px;color:var(--muted);line-height:1.6;}
-.form-wrap{background:#111;border:1px solid var(--border);padding:48px;}
-.form-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:36px;margin-bottom:8px;}
-.form-wrap p{font-size:14px;color:var(--muted);margin-bottom:32px;}
-.form-row{display:flex;flex-direction:column;gap:6px;margin-bottom:20px;}
-label{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);}
-input,select,textarea{background:#0a0a0a;border:1px solid var(--border);color:var(--fg);font-family:'Instrument Sans',sans-serif;font-size:15px;padding:12px 16px;width:100%;outline:none;transition:border-color 0.2s;}
-input:focus,select:focus,textarea:focus{border-color:rgba(204,0,0,0.4);}
-select option{background:#111;}
-textarea{resize:vertical;min-height:80px;}
-.btn{background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.14em;text-transform:uppercase;padding:16px 36px;border:none;cursor:pointer;transition:background 0.2s;margin-top:8px;}
-.btn:hover{background:#ff2222;}
-.divider{height:1px;background:var(--border);margin:0 40px;}
-footer{padding:32px 40px;font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);max-width:860px;margin:0 auto;}
-@media(max-width:600px){.hero,.section{padding-left:24px;padding-right:24px;}.stats{gap:28px;}.form-wrap{padding:28px 24px;}}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --surface: #111111; --surface2: #1a1a1a;
+  --fg: #f0f0f0; --fg2: #999999; --red: #cc0000; --red2: #ff2222;
+  --border: #222222; --mono: 'DM Mono', monospace;
+  --sans: 'Instrument Sans', sans-serif; --display: 'Bebas Neue', sans-serif;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); line-height: 1.7; overflow-x: hidden; }
+
+/* NAV */
+nav {
+  padding: 0 40px; height: 52px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,0.97);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-logo { font-family: var(--display); font-size: 20px; letter-spacing: 0.08em; color: var(--fg); text-decoration: none; }
+.nav-logo span { color: var(--red); }
+.nav-back { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg2); text-decoration: none; transition: color 0.2s; }
+.nav-back:hover { color: var(--red); }
+
+/* HERO */
+.hero { max-width: 860px; margin: 0 auto; padding: 80px 40px 60px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(204,0,0,0.1); border: 1px solid var(--red);
+  color: var(--red); font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.16em; text-transform: uppercase; padding: 6px 14px;
+  margin-bottom: 32px;
+}
+.badge-dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+h1 { font-family: var(--display); font-size: clamp(52px,8vw,96px); line-height: 0.92; letter-spacing: 0.02em; margin-bottom: 28px; }
+h1 span { color: var(--red); }
+
+.sub { font-size: 17px; color: var(--fg2); line-height: 1.8; max-width: 560px; margin-bottom: 48px; }
+.sub strong { color: var(--fg); }
+
+/* STATS */
+.stats { display: flex; gap: 48px; flex-wrap: wrap; margin-bottom: 64px; }
+.stat-num { font-family: var(--display); font-size: 52px; color: var(--red); line-height: 1; }
+.stat-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg2); margin-top: 4px; }
+
+/* DIVIDER */
+.divider { height: 1px; background: var(--border); margin: 0 40px; }
+
+/* FEATURES */
+.section { max-width: 860px; margin: 0 auto; padding: 64px 40px; }
+.section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); margin-bottom: 28px; }
+
+.features { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1px; background: var(--border); margin-bottom: 48px; }
+.feat { background: var(--bg); padding: 28px 24px; transition: background 0.2s; }
+.feat:hover { background: var(--surface); }
+.feat-num { font-family: var(--mono); font-size: 9px; color: var(--red); letter-spacing: 0.12em; margin-bottom: 10px; }
+.feat-title { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--fg); margin-bottom: 8px; }
+.feat-desc { font-size: 13px; color: var(--fg2); line-height: 1.7; }
+
+/* GENRES */
+.genre-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); margin-bottom: 48px; }
+.genre-card { background: var(--surface); padding: 20px; }
+.genre-num { font-family: var(--mono); font-size: 9px; color: var(--red); letter-spacing: 0.12em; margin-bottom: 6px; }
+.genre-name { font-family: var(--display); font-size: 22px; letter-spacing: 0.04em; color: var(--fg); margin-bottom: 4px; }
+.genre-tracks { font-family: var(--mono); font-size: 10px; color: var(--fg2); letter-spacing: 0.08em; }
+
+/* WHAT'S NEW */
+.changelog { border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 32px; margin-bottom: 48px; }
+.changelog-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
+.changelog-item { display: flex; gap: 16px; margin-bottom: 14px; font-size: 14px; color: var(--fg2); line-height: 1.6; }
+.changelog-item:last-child { margin-bottom: 0; }
+.changelog-check { color: var(--red); font-family: var(--mono); flex-shrink: 0; }
+
+/* FORM */
+.form-wrap { background: var(--surface); border: 1px solid var(--border); padding: 48px; }
+.form-wrap h2 { font-family: var(--display); font-size: 42px; letter-spacing: 0.03em; margin-bottom: 8px; }
+.form-wrap p { font-size: 14px; color: var(--fg2); margin-bottom: 32px; line-height: 1.7; }
+.form-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--fg2); }
+input, select, textarea {
+  background: var(--bg); border: 1px solid var(--border); color: var(--fg);
+  font-family: var(--sans); font-size: 15px; padding: 12px 16px; width: 100%;
+  outline: none; transition: border-color 0.2s;
+}
+input:focus, select:focus, textarea:focus { border-color: rgba(204,0,0,0.5); }
+select option { background: var(--surface); }
+textarea { resize: vertical; min-height: 80px; }
+.btn {
+  background: var(--red); color: #fff; font-family: var(--mono);
+  font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  padding: 16px 36px; border: none; cursor: pointer;
+  transition: background 0.2s; margin-top: 8px; width: 100%;
+}
+.btn:hover { background: var(--red2); }
+
+/* ROADMAP */
+.roadmap { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1px; background: var(--border); }
+.road-card { background: var(--bg); padding: 24px 20px; }
+.road-phase { font-family: var(--mono); font-size: 9px; letter-spacing: 0.14em; color: var(--red); text-transform: uppercase; margin-bottom: 8px; }
+.road-title { font-family: var(--mono); font-size: 12px; color: var(--fg); margin-bottom: 6px; }
+.road-date { font-size: 12px; color: var(--fg2); }
+.road-card.current { background: var(--surface); border-bottom: 2px solid var(--red); }
+
+/* FOOTER */
+footer { padding: 28px 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+footer p { font-family: var(--mono); font-size: 10px; color: var(--fg2); letter-spacing: 0.06em; }
+footer a { color: var(--red); text-decoration: none; }
+footer a:hover { color: var(--red2); }
+
+/* TOP BAR */
+.topbar { background: var(--red); height: 3px; }
+
+@media (max-width: 600px) {
+  nav { padding: 0 20px; }
+  .hero, .section { padding-left: 20px; padding-right: 20px; }
+  .divider { margin: 0 20px; }
+  .stats { gap: 28px; }
+  .genre-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-wrap { padding: 28px 20px; }
+  footer { flex-direction: column; gap: 10px; text-align: center; }
+}
 </style>
 </head>
 <body>
-<div class="bar"></div>
 
-<header>
-  <div class="logo">FLOWREAD</div>
-  <div class="tag">S1 Early Labs · Beta Access</div>
-</header>
+<div class="topbar"></div>
 
+<nav>
+  <a href="https://spark1early.github.io" class="nav-logo">SPARK<span>1</span>EARLY</a>
+  <a href="https://spark1early.github.io/tools/flowread.html" class="nav-back">← Try FlowRead Now</a>
+</nav>
+
+<!-- HERO -->
 <div class="hero">
-  <div class="badge">&#9679; Beta — Free Access Now</div>
+  <div class="badge"><span class="badge-dot"></span>Open Beta — v1.8 — All Genres Free</div>
   <h1>Read faster.<br><span>Focus</span> deeper.</h1>
-  <p class="sub">RSVP reading with real BPM-synced genre music. One word at a time. Music tempo locks to your reading speed. Built for people who actually read.</p>
-
+  <p class="sub">
+    RSVP reading tool with <strong>BPM-synced real genre music</strong> built from original productions.
+    One word at a time. Music tempo locks to your reading speed automatically.
+    Built for people who actually read.
+  </p>
   <div class="stats">
-    <div><div class="stat-num">2×</div><div class="stat-label">Average speed increase</div></div>
-    <div><div class="stat-num">8</div><div class="stat-label">Music genres</div></div>
+    <div><div class="stat-num">6</div><div class="stat-label">Music genres</div></div>
+    <div><div class="stat-num">18</div><div class="stat-label">Unique tracks</div></div>
     <div><div class="stat-num">800</div><div class="stat-label">Max WPM</div></div>
     <div><div class="stat-num">$0</div><div class="stat-label">Beta access cost</div></div>
   </div>
@@ -67,21 +157,60 @@ footer{padding:32px 40px;font-family:'DM Mono',monospace;font-size:11px;color:va
 
 <div class="divider"></div>
 
-<div class="section" style="padding-top:64px;">
+<!-- WHAT'S NEW IN v1.8 -->
+<div class="section">
+  <div class="section-label">What's new in v1.8</div>
+  <div class="changelog">
+    <div class="changelog-title">v1.8 Changelog</div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>6 genres with 3 loops each — 18 total tracks (up from 8 genres with 1 each)</span></div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>New genre: Electro Wave — synth-driven, forward motion, 80s electronic energy</span></div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>All audio rebuilt from original Spark1Early productions — not generic AI filler</span></div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>Alphanumeric word pause — P90X, 401k, and similar tokens get extra processing time</span></div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>Font size slider fixed for mobile (ontouchmove + onchange events)</span></div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>Article pipe fixed — Open in FlowRead buttons now transfer text correctly</span></div>
+    <div class="changelog-item"><span class="changelog-check">✦</span><span>Feedback button added to tool — your input goes directly to the build team</span></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- GENRES -->
+<div class="section">
+  <div class="section-label">6 genres · 3 tracks each · all free in beta</div>
+  <div class="genre-grid">
+    <div class="genre-card"><div class="genre-num">01</div><div class="genre-name">LO-FI</div><div class="genre-tracks">3 tracks · Free</div></div>
+    <div class="genre-card"><div class="genre-num">02</div><div class="genre-name">JAZZ</div><div class="genre-tracks">3 tracks · Pro</div></div>
+    <div class="genre-card"><div class="genre-num">03</div><div class="genre-name">ORCHESTRAL</div><div class="genre-tracks">3 tracks · Pro</div></div>
+    <div class="genre-card"><div class="genre-num">04</div><div class="genre-name">AMBIENT</div><div class="genre-tracks">3 tracks · Pro</div></div>
+    <div class="genre-card"><div class="genre-num">05</div><div class="genre-name">PIANO</div><div class="genre-tracks">3 tracks · Pro</div></div>
+    <div class="genre-card"><div class="genre-num">06</div><div class="genre-name">ELECTRO WAVE</div><div class="genre-tracks">3 tracks · Pro · New</div></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- FEATURES -->
+<div class="section">
   <div class="section-label">What you get in beta</div>
   <div class="features">
-    <div class="feat"><div class="feat-icon">♪</div><div class="feat-title">8 Real Genres</div><div class="feat-desc">Jazz, Lo-Fi, Orchestral, Theta Ambient, Solo Piano, Big Band, Percussion — all free during beta.</div></div>
-    <div class="feat"><div class="feat-icon">⚡</div><div class="feat-title">BPM-Synced Music</div><div class="feat-desc">Music tempo = WPM × 0.38. Slow down, the music slows. Speed up, it follows. Automatic.</div></div>
-    <div class="feat"><div class="feat-icon">👁</div><div class="feat-title">ORP Focus Point</div><div class="feat-desc">Every word highlights its Optimal Recognition Point — the letter your eye naturally anchors to.</div></div>
-    <div class="feat"><div class="feat-icon">⏸</div><div class="feat-title">Smart Pacing</div><div class="feat-desc">Punctuation-aware delays. Periods pause longer. Commas breathe. Reading that flows naturally.</div></div>
-    <div class="feat"><div class="feat-icon">📐</div><div class="feat-title">Full Control</div><div class="feat-desc">60–800 WPM. Font size 1.5–5rem. Works on any text you paste or any site section.</div></div>
-    <div class="feat"><div class="feat-icon">🔌</div><div class="feat-title">No Install</div><div class="feat-desc">Runs in your browser. Zero dependencies. Works offline after first load.</div></div>
+    <div class="feat"><div class="feat-num">01</div><div class="feat-title">BPM-Synced Music</div><div class="feat-desc">BPM = WPM × 0.38. Slow down — music slows. Speed up — it follows. Automatic.</div></div>
+    <div class="feat"><div class="feat-num">02</div><div class="feat-title">ORP Focus Point</div><div class="feat-desc">Every word highlights its Optimal Recognition Point. Your eye locks to one spot, every word.</div></div>
+    <div class="feat"><div class="feat-num">03</div><div class="feat-title">Smart Pacing</div><div class="feat-desc">Punctuation-aware delays. Periods pause longer. Commas breathe. Reading that flows naturally.</div></div>
+    <div class="feat"><div class="feat-num">04</div><div class="feat-title">Full Control</div><div class="feat-desc">60–800 WPM. Font 1–5rem. Site sections preloaded. Paste any text. Works on any device.</div></div>
+    <div class="feat"><div class="feat-num">05</div><div class="feat-title">Real Music</div><div class="feat-desc">Built from original Spark1Early productions via ACE-Step. Not stock audio. Not AI filler.</div></div>
+    <div class="feat"><div class="feat-num">06</div><div class="feat-title">No Install</div><div class="feat-desc">Runs in your browser. Zero dependencies. Works offline after first load. No account.</div></div>
   </div>
+</div>
 
+<div class="divider"></div>
+
+<!-- BETA FORM -->
+<div class="section">
+  <div class="section-label">Join the beta</div>
   <div class="form-wrap">
-    <h2>Join the Beta</h2>
-    <p>All 8 genres free during early access. We want your feedback before the Pro tier launches.</p>
-    <form action="https://formspree.io/f/xbdwgdba" method="POST">
+    <h2>Get Beta Access</h2>
+    <p>All 6 genres free during open beta. We want your honest feedback before the Pro tier launches in July. Tell us what you actually think.</p>
+    <form action="https://formspree.io/f/xpwzgvkn" method="POST">
       <div class="form-row"><label>Full Name</label><input type="text" name="name" placeholder="Your name" required></div>
       <div class="form-row"><label>Email</label><input type="email" name="email" placeholder="your@email.com" required></div>
       <div class="form-row">
@@ -97,7 +226,7 @@ footer{padding:32px 40px;font-family:'DM Mono',monospace;font-size:11px;color:va
         </select>
       </div>
       <div class="form-row">
-        <label>What's your current reading speed? (estimate)</label>
+        <label>Current reading speed (estimate)</label>
         <select name="current_wpm">
           <option value="">Select one</option>
           <option>Under 150 WPM</option>
@@ -113,15 +242,53 @@ footer{padding:32px 40px;font-family:'DM Mono',monospace;font-size:11px;color:va
       </div>
       <div class="form-row">
         <label>Anything else? (optional)</label>
-        <textarea name="notes" placeholder="Feature requests, questions, feedback..."></textarea>
+        <textarea name="notes" placeholder="Feature requests, bugs, feedback..."></textarea>
       </div>
-      <input type="hidden" name="_subject" value="FlowRead Beta Signup">
+      <input type="hidden" name="_subject" value="FlowRead Beta Signup v1.8">
       <button type="submit" class="btn">Get Beta Access →</button>
     </form>
   </div>
 </div>
 
 <div class="divider"></div>
-<footer>© 2026 S1 Early Labs · FlowRead v1.7 · <a href="https://spark1early.github.io/tools/flowread.html" style="color:var(--red);text-decoration:none;">Try it now →</a></footer>
+
+<!-- ROADMAP -->
+<div class="section">
+  <div class="section-label">Roadmap</div>
+  <div class="roadmap">
+    <div class="road-card current">
+      <div class="road-phase">Now</div>
+      <div class="road-title">Open Beta</div>
+      <div class="road-date">All genres free · v1.8</div>
+    </div>
+    <div class="road-card">
+      <div class="road-phase">June 2026</div>
+      <div class="road-title">Browser Extension</div>
+      <div class="road-date">Any page · No copy-paste</div>
+    </div>
+    <div class="road-card">
+      <div class="road-phase">July 2026</div>
+      <div class="road-title">Pro Tier Live</div>
+      <div class="road-date">$4.99/mo · All genres</div>
+    </div>
+    <div class="road-card">
+      <div class="road-phase">Sept 2026</div>
+      <div class="road-title">Website API</div>
+      <div class="road-date">Teams · White-label</div>
+    </div>
+    <div class="road-card">
+      <div class="road-phase">2027</div>
+      <div class="road-title">Mobile App</div>
+      <div class="road-date">iOS + Android</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+<footer>
+  <p>© 2026 S1 Early Labs · FlowRead v1.8 · Open Beta</p>
+  <p><a href="https://spark1early.github.io/tools/flowread.html">Try it now →</a></p>
+</footer>
+
 </body>
 </html>
