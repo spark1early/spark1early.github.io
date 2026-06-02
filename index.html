@@ -745,6 +745,67 @@ footer {
   .article-tag { display: none; }
   footer { flex-direction: column; gap: 12px; text-align: center; }
 }
+
+/* ── MOBILE NAV ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  z-index: 201;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--fg);
+  border-radius: 2px;
+  transition: all 0.25s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mobile-drawer {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  top: 52px;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border-bottom: 3px solid var(--red);
+  z-index: 200;
+  padding: 16px 0 24px;
+  transform: translateY(-110%);
+  transition: transform 0.28s ease;
+}
+.mobile-drawer.open {
+  transform: translateY(0);
+}
+.mobile-link {
+  font-family: 'DM Mono', monospace;
+  font-size: 14px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--fg);
+  text-decoration: none;
+  padding: 14px 28px;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s, background 0.2s;
+}
+.mobile-link:hover { color: var(--red); background: var(--bg2); }
+.mobile-link:last-child { border-bottom: none; }
+
+@media (max-width: 768px) {
+  .nav-hamburger { display: flex; }
+  .mobile-drawer { display: flex; }
+}
+
 </style>
 </head>
 <body>
@@ -833,7 +894,20 @@ footer {
   <div class="nav-right">
     <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">☀ LIGHT</button>
   </div>
+  <button class="nav-hamburger" id="navToggle" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+<div class="mobile-drawer" id="mobileDrawer">
+  <a href="#craft" class="mobile-link">Craft</a>
+  <a href="#music" class="mobile-link">Music</a>
+  <a href="#visuals" class="mobile-link">Visuals</a>
+  <a href="#projects" class="mobile-link">Projects</a>
+  <a href="#services" class="mobile-link">Services</a>
+  <a href="#articles" class="mobile-link">Articles</a>
+  <a href="#contact" class="mobile-link">Contact</a>
+  <a href="/store" class="mobile-link" style="color:var(--red);font-weight:600;">Store →</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -1289,5 +1363,24 @@ function changeSpeed() {
   if (reading) { clearInterval(scrollInterval); startScroll(); }
 }
 </script>
+
+<script>
+(function() {
+  var toggle = document.getElementById('navToggle');
+  var drawer = document.getElementById('mobileDrawer');
+  if (!toggle || !drawer) return;
+  toggle.addEventListener('click', function() {
+    toggle.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+  drawer.querySelectorAll('.mobile-link').forEach(function(link) {
+    link.addEventListener('click', function() {
+      toggle.classList.remove('open');
+      drawer.classList.remove('open');
+    });
+  });
+})();
+</script>
+
 </body>
 </html>
