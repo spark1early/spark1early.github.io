@@ -810,14 +810,14 @@ footer {
 </head>
 <body>
 
-<!-- SITE UPDATE POPUP -->
+<!-- STORE DEBUT POPUP -->
 <div id="updatePopup" style="
   position:fixed;bottom:24px;right:24px;z-index:999;
   background:#0a0a0a;color:#f0f0f0;
   border:1px solid #cc0000;
-  max-width:320px;padding:24px;
+  max-width:340px;padding:24px;
   font-family:'Instrument Sans',sans-serif;
-  box-shadow:0 8px 40px rgba(0,0,0,0.4);
+  box-shadow:0 8px 40px rgba(0,0,0,0.5);
   animation:slideUp 0.4s ease;
 ">
 <style>
@@ -827,27 +827,25 @@ footer {
 }
 </style>
 <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;">
-  <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#cc0000;">▸ SITE UPDATE</span>
+  <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#cc0000;">▸ S1 EARLY LABS — NOW OPEN</span>
   <button onclick="document.getElementById('updatePopup').remove()" style="background:none;border:none;color:#666;cursor:pointer;font-size:18px;line-height:1;">×</button>
 </div>
-<p style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.03em;margin-bottom:8px;">V3 IS LIVE — NEW FEATURES</p>
-<p style="font-size:13px;line-height:1.6;color:#999;margin-bottom:16px;">Night mode, live ticker, AI visuals section, embedded player, and the first release of <strong style="color:#f0f0f0;">FlowRead</strong> — a BPM-synced RSVP reading tool built right into the site.</p>
+<p style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.03em;margin-bottom:8px;">THE STORE IS LIVE</p>
+<p style="font-size:13px;line-height:1.6;color:#999;margin-bottom:16px;">First product is out: <strong style="color:#f0f0f0;">Use AI, Don't Be Used By AI</strong> — the guide for small business owners and independent creators who want the real strategy, not the hype.</p>
 <div style="display:flex;gap:10px;flex-wrap:wrap;">
-  <a href="/tools/flowread.html" style="
+  <a href="https://s1earlylabs.gumroad.com" target="_blank" style="
     background:#cc0000;color:#fff;
     font-family:'DM Mono',monospace;font-size:10px;
     letter-spacing:0.1em;text-transform:uppercase;
     padding:8px 16px;text-decoration:none;
-    transition:opacity 0.2s;
-  ">Try FlowRead →</a>
-  <a href="/articles/website-v3-article.html" style="
+  ">Shop Now →</a>
+  <a href="#store" onclick="document.getElementById('updatePopup').remove()" style="
     background:transparent;color:#f0f0f0;
     font-family:'DM Mono',monospace;font-size:10px;
     letter-spacing:0.1em;text-transform:uppercase;
     padding:8px 16px;text-decoration:none;
     border:1px solid #333;
-    transition:border-color 0.2s;
-  ">Read update notes →</a>
+  ">See What's Inside →</a>
 </div>
 </div>
 
@@ -886,8 +884,8 @@ footer {
     <li><a href="#music">Music</a></li>
     <li><a href="#visuals">Visuals</a></li>
     <li><a href="#projects">Projects</a></li>
+    <li><a href="#store" style="color:var(--red);font-weight:600;">Store</a></li>
     <li><a href="#services">Services</a></li>
-    <li><a href="/store" style="color:var(--red);font-weight:600;">Store</a></li>
     <li><a href="#articles">Articles</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
@@ -903,10 +901,10 @@ footer {
   <a href="#music" class="mobile-link">Music</a>
   <a href="#visuals" class="mobile-link">Visuals</a>
   <a href="#projects" class="mobile-link">Projects</a>
+  <a href="#store" class="mobile-link" style="color:var(--red);font-weight:600;">Store ↗</a>
   <a href="#services" class="mobile-link">Services</a>
   <a href="#articles" class="mobile-link">Articles</a>
   <a href="#contact" class="mobile-link">Contact</a>
-  <a href="/store" class="mobile-link" style="color:var(--red);font-weight:600;">Store →</a>
 </div>
 
 <!-- HERO -->
@@ -916,6 +914,7 @@ footer {
   <p class="hero-sub">Twenty years making music. Graphic design roots. Now building at the intersection of <strong>creativity and technology</strong> — independently, without permission. Also an <strong>AI consultant</strong> helping artists and businesses do the same.</p>
   <div class="hero-btns">
     <a href="#craft" class="btn btn-primary">See the work →</a>
+    <a href="#store" class="btn btn-ghost" style="border-color:var(--red);color:var(--red);">Shop S1EL Store</a>
     <a href="https://spark1early.bandcamp.com" target="_blank" class="btn btn-ghost">Hear the music</a>
   </div>
   <div class="hero-stats">
@@ -1116,9 +1115,83 @@ footer {
   </div>
 </section>
 
+<!-- STORE -->
+<section id="store">
+  <div class="section-num">005</div>
+  <p class="section-label">S1 Early Labs Store</p>
+  <h2 class="section-title">THE DIGITAL STORE</h2>
+  <p style="font-size:15px;line-height:1.7;color:var(--fg2);max-width:600px;margin-bottom:12px;">
+    Products built from 20+ years of working at the intersection of creativity, technology, and independent business. No fluff. No hype. Real strategy from someone who's actually doing it.
+  </p>
+  <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--red);margin-bottom:40px;">
+    ▸ ALSO AVAILABLE AT S1EARLYLABS.COM
+  </p>
+
+  <!-- FEATURED PRODUCT -->
+  <div style="
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--red);
+    background: var(--card-bg);
+    padding: 40px;
+    margin-bottom: 1px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: start;
+  ">
+    <div>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--red);display:block;margin-bottom:12px;">▸ NOW AVAILABLE — EBOOK</span>
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:0.03em;color:var(--fg);margin-bottom:8px;">USE AI, DON'T BE USED BY AI</h3>
+      <p style="font-size:14px;line-height:1.7;color:var(--fg2);max-width:520px;margin-bottom:24px;">The foundational guide for small business owners and independent creators navigating the AI era without losing themselves to it. What the platforms don't tell you. How to actually profit. What to protect.</p>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <a href="https://s1earlylabs.gumroad.com" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;padding:12px 24px;text-decoration:none;">Get It Now →</a>
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--fg);">$12</span>
+      </div>
+    </div>
+    <div style="text-align:right;">
+      <div style="
+        width:80px;height:80px;
+        border:1px solid var(--red);
+        display:flex;align-items:center;justify-content:center;
+        font-size:32px;
+        margin-left:auto;
+        color:var(--red);
+      ">⬡</div>
+    </div>
+  </div>
+
+  <!-- MORE PRODUCTS COMING -->
+  <div style="
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  ">
+    <div>
+      <span style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.15em;color:var(--fg2);text-transform:uppercase;display:block;margin-bottom:8px;">Coming Soon</span>
+      <p style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:0.03em;color:var(--fg);">How to Start a Business in the AI Age · iPad Planners · AI &amp; Biz Companion Decks</p>
+    </div>
+    <a href="https://s1earlylabs.gumroad.com" target="_blank" style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);text-decoration:none;">Browse Store →</a>
+  </div>
+
+  <!-- DOMAIN REDIRECT NOTE (for when s1earlylabs.com goes live) -->
+  <!-- 
+    REDIRECT STRATEGY: Once s1earlylabs.com is purchased and CNAME pointed to spark1early.github.io,
+    add the following to a separate root-level redirect or keep this site's index.html as-is.
+    To bounce s1earlylabs.com → store: add to a root index.html for that domain:
+    <meta http-equiv="refresh" content="0; url=/store/">
+    OR move store/index.html to the repo root so s1earlylabs.com IS the store directly.
+    Current approach: Gumroad link (s1earlylabs.gumroad.com) handles all store traffic until domain is live.
+  -->
+</section>
+
 <!-- SERVICES -->
 <section id="services">
-  <div class="section-num">005</div>
+  <div class="section-num">006</div>
   <p class="section-label">The Services</p>
   <h2 class="section-title">WORK WITH ME</h2>
   <p style="font-size:15px;line-height:1.7;color:var(--fg2);max-width:560px;margin-bottom:48px;">
@@ -1150,7 +1223,7 @@ footer {
 
 <!-- ARTICLES + READING APP -->
 <section id="articles">
-  <div class="section-num">006</div>
+  <div class="section-num">007</div>
   <p class="section-label">The Articles</p>
   <h2 class="section-title">FROM EXPERIENCE</h2>
   <div class="articles-list">
@@ -1232,7 +1305,7 @@ footer {
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="section-num">007</div>
+  <div class="section-num">008</div>
   <p class="section-label">Let's Talk</p>
   <h2 class="section-title">REACH OUT</h2>
   <p style="font-size:15px;line-height:1.7;color:var(--fg2);max-width:480px;margin-bottom:48px;">
