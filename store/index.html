@@ -20,8 +20,8 @@ body{background:var(--bg);color:var(--fg);font-family:var(--sans);line-height:1.
 
 /* NAV */
 nav{padding:0 40px;height:60px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);background:rgba(20,15,15,.96);backdrop-filter:blur(10px);position:sticky;top:0;z-index:100}
-.nav-logo{font-family:var(--display);font-size:24px;letter-spacing:.08em;color:var(--fg);text-decoration:none}
-.nav-logo span{color:var(--red)}
+.nav-logo{display:flex;align-items:center;text-decoration:none}
+.nav-logo img{height:44px;width:auto;display:block}
 .nav-back{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg2);text-decoration:none;transition:color .2s}
 .nav-back:hover{color:var(--gold)}
 
@@ -96,7 +96,7 @@ footer a{color:var(--red2);text-decoration:none}
 <body>
 <div class="announce">Free Download · Use AI, Don’t Be Used By AI — Get it free now →</div>
 <nav>
-  <a href="/" class="nav-logo">SPARK<span>1</span>EARLY</a>
+  <a href="/" class="nav-logo"><img src="/assets/s1el-logo.png" alt="S1 Early Labs Digital Store"></a>
   <a href="/" class="nav-back">← Main site</a>
 </nav>
 
