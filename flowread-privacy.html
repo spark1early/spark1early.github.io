@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowRead Privacy Policy — S1 Early Labs</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #0a0a0a; --bg2: #111111; --fg: #f0f0f0; --fg2: #999999;
+  --red: #cc0000; --border: #222222;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'Instrument Sans', sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--body); line-height: 1.7; }
+.wrap { max-width: 760px; margin: 0 auto; padding: 60px 24px 80px; }
+.kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--fg2); margin-bottom: 14px; }
+h1 { font-family: var(--display); font-size: clamp(40px, 7vw, 64px); letter-spacing: .02em; line-height: .95; margin-bottom: 8px; }
+h1 span { color: var(--red); }
+.updated { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--fg2); margin-bottom: 40px; }
+h2 { font-family: var(--display); font-size: 26px; letter-spacing: .03em; margin: 40px 0 12px; color: var(--fg); }
+p, li { font-size: 15.5px; color: #cfcfcf; margin-bottom: 14px; }
+ul { padding-left: 22px; margin-bottom: 14px; }
+strong { color: var(--fg); }
+.tldr { background: var(--bg2); border: 1px solid var(--border); border-left: 3px solid var(--red); padding: 18px 20px; margin: 24px 0 8px; }
+.tldr p { margin-bottom: 0; }
+a { color: var(--red); text-decoration: none; }
+a:hover { text-decoration: underline; }
+footer { border-top: 1px solid var(--border); margin-top: 60px; padding-top: 24px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--fg2); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="kicker">S1 Early Labs</div>
+  <h1>FLOW<span>READ</span> PRIVACY POLICY</h1>
+  <div class="updated">Effective: July 2026 · Applies to the FlowRead browser extension and web tool</div>
+
+  <div class="tldr">
+    <p><strong>Short version:</strong> FlowRead doesn't collect, track, or sell your data. Your settings stay on your device. The only thing ever sent anywhere is your license key (if you buy Pro), which is checked against our license server to confirm your subscription. That's it.</p>
+  </div>
+
+  <h2>What FlowRead Stores — and Where</h2>
+  <p>The extension keeps a small amount of data in your browser's built-in extension storage (<strong>chrome.storage</strong>), which syncs across your own Chrome profile if you're signed in:</p>
+  <ul>
+    <li><strong>Your settings</strong> — reading speed, font size, and selected music genre.</li>
+    <li><strong>Your lifetime words-read counter</strong> — a running total, stored locally, never transmitted.</li>
+    <li><strong>Your Pro license key and tier status</strong> — only if you subscribe to FlowRead Pro.</li>
+  </ul>
+  <p>None of this leaves your browser, with the single exception described below.</p>
+
+  <h2>The One Network Request: License Validation</h2>
+  <p>If you activate FlowRead Pro, the extension sends your license key to our validation server (a Cloudflare Worker operated by S1 Early Labs), which confirms the key with Gumroad — the payment platform that processed your purchase. The server responds with a simple valid/invalid answer. This check runs when you activate and roughly every 7 days afterward to confirm your subscription is still active.</p>
+  <p>We do not log, store, or associate this key with any other information on our end. Payment details (name, card, billing address) are handled entirely by <a href="https://gumroad.com/privacy" target="_blank" rel="noopener">Gumroad</a> and never touch FlowRead or our servers.</p>
+
+  <h2>What FlowRead Reads on Web Pages</h2>
+  <p>When you click "Read This Page" or use the right-click "Read selection" option, the extension extracts the article text from the page you're on — <strong>entirely on your device</strong> — and displays it in the reading panel. Page content is never sent to any server, never stored beyond your current session, and never analyzed by anything other than the local reading engine.</p>
+
+  <h2>What We Don't Do</h2>
+  <ul>
+    <li>No analytics or telemetry of any kind.</li>
+    <li>No tracking of your browsing history or the pages you read.</li>
+    <li>No ads, no third-party trackers, no data brokers.</li>
+    <li>No selling, renting, or sharing of any user data with anyone.</li>
+    <li>No accounts, no passwords, no personal profiles.</li>
+  </ul>
+
+  <h2>The Feedback Form</h2>
+  <p>If you choose to submit feedback through our website form, the name, email, and message you provide are delivered to us by our form provider solely so we can read and respond. Submitting feedback is entirely optional.</p>
+
+  <h2>Data Removal</h2>
+  <p>Uninstalling the extension deletes all locally stored FlowRead data. To cancel a Pro subscription, use your Gumroad account or the link in your purchase receipt — cancellation stops future validation of your key automatically.</p>
+
+  <h2>Changes to This Policy</h2>
+  <p>If FlowRead's data practices ever change, this page will be updated and the effective date revised. Material changes will be noted in the extension's changelog.</p>
+
+  <h2>Contact</h2>
+  <p>Questions about this policy or your data: reach S1 Early Labs via the contact options at <a href="https://spark1early.github.io">spark1early.github.io</a> or the publisher email listed on the Chrome Web Store listing.</p>
+
+  <footer>
+    © 2026 S1 Early Labs · Boston, MA · FlowRead
+  </footer>
+
+</div>
+</body>
+</html>
