@@ -1,4 +1,4 @@
-const CACHE = 's1el-scanner-v2';
+const CACHE = 's1el-scanner-v3';
 const SHELL = ['./','./index.html','./manifest.webmanifest',
   './icons/icon-192.png','./icons/icon-512.png','./icons/icon-180.png','./icons/icon-32.png'];
 self.addEventListener('install', e => {

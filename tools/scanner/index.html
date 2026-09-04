@@ -137,7 +137,7 @@
     <h2>My Pools <span>VIEW-ONLY</span></h2>
     <p class="hint">Paste your <b>public</b> address (0x…). Read-only — never a seed phrase or key. DeBank reads your live positions and <b>pending fees</b> on-chain.</p>
     <div class="row2"><input id="addr" placeholder="0x… your public address" autocomplete="off"></div>
-    <div class="chips"><a id="debank" class="chip" target="_blank" rel="noopener">Open in DeBank ↗</a></div>
+    <div class="chips"><a id="debank" class="chip" target="_blank" rel="noopener">Open in DeBank ↗</a><a id="krystal" class="chip" target="_blank" rel="noopener">Krystal positions ↗</a></div>
 
     <p class="hint">Log a position to see its live in-range status and a running fee estimate. Enter your range low/high (the band you set on the DEX).</p>
     <div class="row2">
@@ -311,7 +311,7 @@ async function renderPositions(){
   document.querySelectorAll("#positions .x").forEach(b=>b.addEventListener("click",()=>{const a=getPos();a.splice(+b.dataset.i,1);setPos(a);renderPositions();}));
   document.querySelectorAll("#positions .setcur").forEach(inp=>inp.addEventListener("change",()=>{const a=getPos();a[+inp.dataset.i].cur=inp.value;setPos(a);renderPositions();}));
 }
-function updateAddr(){const a=$("#addr").value.trim();$("#debank").href=a?("https://debank.com/profile/"+a):"https://debank.com";try{localStorage.setItem("s1el_addr",a);}catch(e){}}
+function updateAddr(){const a=$("#addr").value.trim();$("#debank").href=a?("https://debank.com/profile/"+a):"https://debank.com";$("#krystal").href=a?("https://cloud-ui.krystal.app/wallets/"+a+"/positions"):"https://cloud-ui.krystal.app/";try{localStorage.setItem("s1el_addr",a);}catch(e){}}
 
 /* ---- filters + wiring ---- */
 function saveFilters(){try{localStorage.setItem("s1el_filters",JSON.stringify({chain,minTvl:$("#minTvl").value,sort:$("#sort").value}));}catch(e){}}
