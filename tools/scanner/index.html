@@ -26,6 +26,7 @@
   h2{font-family:"Bebas Neue",sans-serif;font-weight:400;letter-spacing:.05em;font-size:24px;margin:0 0 4px;display:flex;align-items:baseline;gap:8px}
   h2 span{font:500 10px/1 "DM Mono",monospace;color:var(--muted);letter-spacing:.12em}
   .sub{color:var(--muted);font-size:12.5px;margin:4px 0 16px;line-height:1.4}
+  .series{font:500 10px/1 "DM Mono",monospace;letter-spacing:.22em;color:var(--gold);margin:2px 0 14px}
   .hint{color:var(--muted);font-size:11.5px;line-height:1.5;margin:8px 0}
   .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
   .chip{font:500 12px/1 "DM Mono",monospace;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:2px;padding:7px 10px;cursor:pointer;user-select:none;text-decoration:none;display:inline-block}
@@ -95,6 +96,7 @@
 <body>
 <div class="wrap">
   <header><h1>Pool Scanner</h1><span class="sub" style="margin:0">S1 Early Labs</span></header>
+  <div class="series">CRYPTO CASINO SERIES</div>
   <p class="sub">Live liquidity pools ranked by yield. Find the pool here, then add liquidity yourself on the DEX. The scanner finds — it never holds your money.</p>
 
   <div id="installBar">
@@ -104,9 +106,11 @@
 
   <div class="chips" id="chainChips">
     <span class="chip" data-chain="Base" aria-pressed="true">Base</span>
-    <span class="chip" data-chain="BSC" aria-pressed="false">BSC</span>
+    <span class="chip" data-chain="BSC" aria-pressed="false">BNB</span>
     <span class="chip" data-chain="Ethereum" aria-pressed="false">Ethereum</span>
     <span class="chip" data-chain="Arbitrum" aria-pressed="false">Arbitrum</span>
+    <span class="chip" data-chain="Solana" aria-pressed="false">Solana</span>
+    <span class="chip" data-chain="Robinhood" aria-pressed="false">Robinhood</span>
     <span class="chip" data-chain="ALL" aria-pressed="false">All chains</span>
   </div>
   <div class="chips" id="tokenChips">
@@ -165,7 +169,9 @@
 
 <script>
 const API="https://yields.llama.fi/pools";
-const DEXES=["pancakeswap","aerodrome","uniswap","sushiswap"];
+const DEXES=["pancakeswap","aerodrome","uniswap","sushiswap","balancer","velodrome","camelot","quickswap","thena","ramses","pharaoh","orca","raydium","meteora","maverick","trader-joe","baseswap","syncswap"];
+function isSwapPool(p){const s=(p.symbol||"");if(s.includes('-')||s.includes('/'))return true;return DEXES.some(d=>(p.project||"").toLowerCase().includes(d));}
+function chainMatch(pc,sel){if(sel==="ALL")return true;const a=(pc||"").toLowerCase().replace(/\s+/g,'');if(sel==="Robinhood")return a.includes("robinhood");return a===sel.toLowerCase().replace(/\s+/g,'');}
 const CGID={BTC:'bitcoin',CBBTC:'bitcoin',WBTC:'bitcoin',TBTC:'bitcoin',ETH:'ethereum',WETH:'ethereum',
   SOL:'solana',WSOL:'solana',TAO:'bittensor',WTAO:'bittensor',VIRTUAL:'virtual-protocol',
   AERO:'aerodrome-finance',CAKE:'pancakeswap-token',BNB:'binancecoin',WBNB:'binancecoin',
@@ -186,7 +192,7 @@ async function load(){
   try{
     const r=await fetch(API); if(!r.ok) throw new Error("HTTP "+r.status);
     const j=await r.json();
-    RAW=(j.data||[]).filter(p=>p.apy!=null && DEXES.some(d=>(p.project||"").toLowerCase().includes(d)));
+    RAW=(j.data||[]).filter(p=>p.apy!=null && isSwapPool(p));
     render(); renderPositions();
   }catch(e){
     $("#list").innerHTML='<div class="state">Couldn\'t reach the pool data.<br>Check your connection and tap refresh.</div>';
@@ -207,7 +213,7 @@ function coach(p){
   return s;
 }
 function filtered(){
-  let list=RAW.filter(p=>chain==="ALL"?true:p.chain===chain);
+  let list=RAW.filter(p=>chainMatch(p.chain,chain));
   const minTvl=+$("#minTvl").value; list=list.filter(p=>(p.tvlUsd||0)>=minTvl);
   const q=(token||$("#search").value||"").trim().toUpperCase();
   if(q){ if(q==="USDC") list=list.filter(p=>/USD|DAI|USDT|USDC/.test((p.symbol||"").toUpperCase()));
