@@ -118,6 +118,7 @@
     <p>Rule of thumb: <b>high turnover + high fee-APR = real, active yield.</b> A sky-high APR with low volume is usually a token bribe, not a durable payout.</p>
     <h3>FLAGS</h3>
     <p><b class="g">STABLE / LOW IL</b> = safer, low impermanent-loss risk. <b class="r">IL RISK</b> = volatile pair; you can lose to price divergence. <b class="y">INCENTIVE-HEAVY</b> = yield mostly token rewards. <b>SINGLE-SIDED</b> = one asset.</p>
+    <p><b class="y">BEEFY · AUTO-COMPOUND</b> = a Beefy vault that auto-compounds an underlying pool. Higher APY comes from compounding (Beefy takes a small fee); vaults show no volume, and they add Beefy's contract layer on top of the pool's own risk.</p>
     <h3>MY POOLS RANGE</h3>
     <p><b class="g">IN RANGE</b> = price is inside your band, earning fees. <b class="r">OUT OF RANGE</b> = price left your band, not earning.</p>
     <h3>LINKS</h3>
@@ -221,13 +222,45 @@ const pct=n=>(n==null?"—":n.toFixed(1)+"%");
 function fmtNum(n){n=+n;if(!isFinite(n))return"—";if(n>=1000)return n.toLocaleString(undefined,{maximumFractionDigits:0});if(n>=1)return n.toFixed(2);if(n>=0.01)return n.toFixed(4);return n.toPrecision(2);}
 function tokensOf(pair){return (pair||"").toUpperCase().split(/[\/\-\s_]+/).filter(Boolean);}
 
+async function loadBeefy(){
+  try{
+    const [vr,br,tr]=await Promise.all([
+      fetch("https://api.beefy.finance/vaults"),
+      fetch("https://api.beefy.finance/apy/breakdown"),
+      fetch("https://api.beefy.finance/tvl")
+    ]);
+    if(!vr.ok||!br.ok||!tr.ok) return [];
+    const vaults=await vr.json(), bd=await br.json(), tvl=await tr.json();
+    const tvlMap={}; for(const c in tvl) Object.assign(tvlMap, tvl[c]);
+    const CM={ethereum:"Ethereum",bsc:"BSC",base:"Base",arbitrum:"Arbitrum",optimism:"Optimism",polygon:"Polygon",avax:"Avalanche"};
+    const out=[];
+    for(const v of vaults){
+      if(v.status!=="active") continue;
+      const b=bd[v.id]; if(!b) continue;
+      const apy=(b.totalApy!=null?b.totalApy:0)*100; if(!(apy>0)) continue;
+      const base=(b.tradingApr!=null?b.tradingApr:0)*100;
+      const reward=Math.max(0, apy-base);
+      const assets=v.assets||[];
+      const sym=assets.length?assets.join("-"):(v.name||v.id);
+      const allStable=assets.length>0 && assets.every(a=>STABLE.test((a||"").toUpperCase()));
+      out.push({chain:CM[v.chain]||v.chain, project:"Beefy · "+(v.platformId||"vault"), symbol:sym,
+        tvlUsd:tvlMap[v.id]||0, apy:apy, apyBase:base, apyReward:reward, apyPct7D:null,
+        stablecoin:allStable, ilRisk:allStable?"no":(assets.length>1?"yes":"no"),
+        exposure:assets.length>1?"multi":"single", volumeUsd1d:null, pool:v.id, poolMeta:"auto-compound",
+        beefy:true, link:"https://app.beefy.com/vault/"+v.id});
+    }
+    return out;
+  }catch(e){ return []; }
+}
 async function load(){
   $("#list").innerHTML='<div class="state">Fetching live pools…</div>'; $("#count").textContent="Loading…";
   try{
     const r=await fetch(API); if(!r.ok) throw new Error("HTTP "+r.status);
     const j=await r.json();
-    RAW=(j.data||[]).filter(p=>p.apy!=null && isSwapPool(p));
-    render(); renderPositions();
+    const base=(j.data||[]).filter(p=>p.apy!=null && isSwapPool(p) && !(p.project||"").toLowerCase().includes("beefy"));
+    RAW=base; render(); renderPositions();
+    const beefy=await loadBeefy();
+    if(beefy.length){ RAW=base.concat(beefy); render(); renderPositions(); }
   }catch(e){
     $("#list").innerHTML='<div class="state">Couldn\'t reach the pool data.<br>Check your connection and tap refresh.</div>';
     $("#count").textContent="offline";
@@ -263,7 +296,7 @@ function poolRow(p){
   const feeShare=(base!=null&&p.apy>0)?Math.max(0,Math.min(100,base/p.apy*100)):(reward!=null?0:100);
   const dailyFee=base!=null?(base/365).toFixed(2)+"%/d fees":"fee split n/a";
   const vol=p.volumeUsd1d, turn=(vol&&p.tvlUsd)?vol/p.tvlUsd:null;
-  const url="https://defillama.com/yields/pool/"+p.pool;
+  const url=p.link||("https://defillama.com/yields/pool/"+p.pool);
   const where=(p.project||"").replace(/-/g," ")+" · "+p.chain+(p.poolMeta?(" · "+p.poolMeta):"");
   const tr=p.apyPct7D!=null?`<span class="trend ${p.apyPct7D>=0?'up':'down'}">${p.apyPct7D>=0?'▲':'▼'}${Math.abs(p.apyPct7D).toFixed(0)}%</span>`:'';
   const flags=[];
@@ -272,6 +305,7 @@ function poolRow(p){
   if(p.ilRisk==="yes"&&!p.stablecoin) flags.push('<span class="flag f-il">IL RISK</span>');
   if(reward&&p.apy&&reward/p.apy>0.6) flags.push('<span class="flag f-inc">INCENTIVE-HEAVY</span>');
   if(p.exposure==="single") flags.push('<span class="flag f-stable">SINGLE-SIDED</span>');
+  if(p.beefy) flags.push('<span class="flag f-inc">BEEFY · AUTO-COMPOUND</span>');
   return `<div class="pool ${riskClass(p)}">
     <div class="top"><span class="pair">${p.symbol}</span><span class="apr">${pct(p.apy)}${tr}</span></div>
     <div class="where">${where}</div>
@@ -283,7 +317,7 @@ function poolRow(p){
   </div>`;
 }
 function heroRow(p){
-  const url="https://defillama.com/yields/pool/"+p.pool;
+  const url=p.link||("https://defillama.com/yields/pool/"+p.pool);
   const where=(p.project||"").replace(/-/g," ")+" · "+p.chain+(p.poolMeta?(" · "+p.poolMeta):"");
   return `<a class="hero" href="${url}" target="_blank" rel="noopener">
     <div class="tag">TOP MATCH</div><div class="pair">${p.symbol}</div>
