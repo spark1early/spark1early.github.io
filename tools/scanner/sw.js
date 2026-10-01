@@ -1,4 +1,4 @@
-const CACHE = 's1el-scanner-v8';
+const CACHE = 's1el-scanner-v10';
 const SHELL = ['./','./index.html','./manifest.webmanifest',
   './icons/icon-192.png','./icons/icon-512.png','./icons/icon-180.png','./icons/icon-32.png'];
 self.addEventListener('install', e => {
@@ -9,6 +9,6 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   const url = new URL(e.request.url);
-  if (url.origin !== location.origin) return;            // API / fonts hit the network directly
+  if (url.origin !== location.origin) return;
   e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
 });

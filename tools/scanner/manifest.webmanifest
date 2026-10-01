@@ -1,7 +1,7 @@
 {
   "name": "S1EL Pool Scanner",
   "short_name": "Pool Scanner",
-  "description": "Live liquidity pool scanner — find yield, enter on the DEX yourself.",
+  "description": "Live liquidity pool scanner — find yield, enter on the DEX yourself. S1EL Crypto Casino Series.",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
