@@ -105,6 +105,7 @@
   .legend .sw{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:baseline;margin-right:2px}
   .legend b{font-weight:600}
   .legend .g{color:var(--green)} .legend .r{color:var(--red)} .legend .y{color:var(--gold)}
+  .legend a{color:var(--gold);text-decoration:none}
   .note{color:var(--muted);font-size:11.5px;line-height:1.5;margin-top:24px;border-top:1px solid var(--line);padding-top:14px}
   .state{color:var(--muted);font:400 13px/1.5 "DM Mono",monospace;padding:30px 4px;text-align:center}
   .pair,.where,.split,.rcur,.d{overflow-wrap:anywhere}
@@ -147,8 +148,8 @@
     <p style="color:var(--muted);margin-top:10px">Not financial advice. Every pool carries risk; you enter on the DEX yourself.</p>
   </div>
 
-  <button id="dexToggle" class="legendbtn">Top DEXs by 24h volume ▾</button>
-  <div id="dexPanel" class="legend" hidden><div class="state">Loading rankings…</div></div>
+  <button id="dexToggle" class="legendbtn">🔥 Trending pairs — ranked per chain (24h) ▾</button>
+  <div id="dexPanel" class="legend" hidden><div class="state">Loading trending pairs…</div></div>
 
   <div id="installBar">
     <span id="installText">Add to your home screen for one-tap access.</span>
@@ -248,16 +249,18 @@ const DSCHAIN={Ethereum:"ethereum",BSC:"bsc",Base:"base",Arbitrum:"arbitrum",Pol
 function chartUrl(p){
   const slug=DSCHAIN[p.chain];
   const ut=p.underlyingTokens||[];
+  const parts=tokensOf(p.symbol);
   if(slug && ut.length){
-    const parts=tokensOf(p.symbol);
     let idx=parts.findIndex(x=>!STABLE.test(x)); if(idx<0) idx=0;
-    const addr=ut[idx]||ut[0];
-    if(addr){
+    let addr=ut[idx]||ut[0];
+    const bad=!addr || /^0x0+$/.test(addr) || /^0xe{6,}/i.test(addr);  // skip zero/native placeholders
+    if(!bad){
       if(slug==="solana") return "https://dexscreener.com/solana/"+addr;
       if(/^0x[0-9a-fA-F]{40}$/.test(addr)) return "https://dexscreener.com/"+slug+"/"+addr;
     }
   }
-  const q=(p.symbol||"").replace(/[-\/]/g," ").trim();
+  // fallback: search the full pair with spaces (dashes don't read)
+  const q=(p.symbol||"").replace(/[-\/_]+/g," ").trim();
   return "https://dexscreener.com/search?q="+encodeURIComponent(q);
 }
 function chainMatch(pc,sel){if(sel==="ALL")return true;const a=(pc||"").toLowerCase().replace(/\s+/g,'');if(sel==="Robinhood")return a.includes("robinhood");return a===sel.toLowerCase().replace(/\s+/g,'');}
@@ -486,23 +489,39 @@ function fireAlerts(coolingNames){
 }
 function updateAddr(){const a=$("#addr").value.trim();$("#debank").href=a?("https://debank.com/profile/"+a):"https://debank.com";$("#krystal").href=a?("https://cloud-ui.krystal.app/wallets/"+a+"/positions"):"https://cloud-ui.krystal.app/";try{localStorage.setItem("s1el_addr",a);}catch(e){}}
 
-/* ---- DEX rankings ---- */
-let DEXRANK=null;
-async function loadDexRank(){
+/* ---- Trending pairs per chain (GeckoTerminal) ---- */
+const GTNET={Base:"base",BSC:"bsc",Ethereum:"eth",Arbitrum:"arbitrum",Solana:"solana"};
+const GT2DS={eth:"ethereum",bsc:"bsc",base:"base",arbitrum:"arbitrum",solana:"solana",polygon_pos:"polygon",optimism:"optimism",avalanche:"avalanche"};
+let TRENDCACHE={};
+async function loadTrending(){
   const el=document.getElementById("dexPanel");
-  if(DEXRANK){el.innerHTML=DEXRANK;return;}
-  el.innerHTML='<div class="state">Loading rankings…</div>';
+  const key=chain, net=GTNET[chain];
+  if(chain==="Robinhood"){el.innerHTML='<div class="state">Trending pairs aren\'t indexed for Robinhood chain yet.</div>';return;}
+  if(TRENDCACHE[key]){el.innerHTML=TRENDCACHE[key];return;}
+  el.innerHTML='<div class="state">Loading trending pairs…</div>';
   try{
-    const r=await fetch("https://api.llama.fi/overview/dexs?excludeTotalDataChart=true&excludeTotalDataChartBreakdown=true");
+    const url = net
+      ? "https://api.geckoterminal.com/api/v2/networks/"+net+"/pools?sort=h24_volume_usd_desc&page=1"
+      : "https://api.geckoterminal.com/api/v2/networks/trending_pools?page=1";
+    const r=await fetch(url,{headers:{Accept:"application/json"}});
     if(!r.ok) throw 0;
     const j=await r.json();
-    const ps=(j.protocols||[]).filter(x=>x.total24h>0).sort((a,b)=>b.total24h-a.total24h).slice(0,15);
-    DEXRANK='<h3>TOP DEXS · 24H VOLUME (ALL CHAINS)</h3>'+ps.map((x,i)=>{
-      const ch=x.change_1d; const arrow=ch==null?'':(ch>=0?'<span class="g">▲'+Math.abs(ch).toFixed(0)+'%</span>':'<span class="r">▼'+Math.abs(ch).toFixed(0)+'%</span>');
-      return '<p><b>'+(i+1)+'. '+x.name+'</b> — '+fmtUsd(x.total24h)+' '+arrow+'</p>';
-    }).join('')+'<p style="color:var(--muted);margin-top:8px">Busiest swap platforms right now. More platform volume = more fee flow into its pools.</p>';
-    el.innerHTML=DEXRANK;
-  }catch(e){ el.innerHTML='<div class="state">Couldn\'t load DEX rankings. Tap again to retry.</div>'; }
+    const rows=(j.data||[]).slice(0,20).map((p,i)=>{
+      const a=p.attributes||{};
+      const pnet=(p.id||"").split("_")[0], dsslug=GT2DS[pnet]||pnet;
+      const vol=+((a.volume_usd||{}).h24||0), liq=+(a.reserve_in_usd||0);
+      const chg=(a.price_change_percentage||{}).h24, chgn=chg==null?null:+chg;
+      const tx=(a.transactions||{}).h24||{}, txn=(tx.buys||0)+(tx.sells||0);
+      const chart="https://dexscreener.com/"+dsslug+"/"+a.address;
+      const chgs=chgn==null?"":'<span class="'+(chgn>=0?'g':'r')+'">'+(chgn>=0?'+':'')+chgn.toFixed(1)+'%</span>';
+      return '<p><b>'+(i+1)+'. '+(a.name||'?')+'</b> '+chgs+'<br>'
+        +'<span style="color:var(--muted)">'+fmtUsd(vol)+' vol · '+fmtUsd(liq)+' liq · '+txn.toLocaleString()+' txns</span> '
+        +'<a href="'+chart+'" target="_blank" rel="noopener">chart ↗</a></p>';
+    }).join("");
+    const title='<h3>🔥 TRENDING PAIRS · '+(chain==="ALL"?"ALL CHAINS":chain.toUpperCase())+' · 24H VOLUME</h3>';
+    TRENDCACHE[key]=title+(rows||'<div class="state">No pairs returned.</div>')+'<p style="color:var(--muted);margin-top:8px">Ranked by 24h volume, live from GeckoTerminal. Switch the chain chip above to re-rank. Tap a pair for its chart.</p>';
+    el.innerHTML=TRENDCACHE[key];
+  }catch(e){ el.innerHTML='<div class="state">Couldn\'t load trending pairs. Tap again to retry.</div>'; }
 }
 
 /* ---- filters + wiring ---- */
@@ -516,7 +535,7 @@ function wireChips(id,attr,cb){
     c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();act();}});
   });
 }
-wireChips("chainChips","chain",v=>chain=v);
+wireChips("chainChips","chain",v=>{chain=v;const dp=document.getElementById("dexPanel");if(dp&&!dp.hidden)loadTrending();});
 wireChips("tokenChips","token",v=>{token=v;$("#search").value="";});
 $("#search").addEventListener("input",()=>{token="";document.querySelectorAll("#tokenChips .chip").forEach((x,i)=>x.setAttribute("aria-pressed",i===0?"true":"false"));render();});
 $("#minTvl").addEventListener("change",()=>{saveFilters();render();});
@@ -553,9 +572,9 @@ tt.addEventListener("click",()=>{const t=document.body.classList.contains("light
 (function(){const lt=document.getElementById("legendToggle"),lg=document.getElementById("legend");
 lt.addEventListener("click",()=>{const open=!lg.hidden;lg.hidden=open;lt.textContent=open?"How to read this ▾":"Hide legend ▴";});})();
 
-/* dex rankings toggle */
+/* trending pairs toggle */
 (function(){const dt=document.getElementById("dexToggle"),dp=document.getElementById("dexPanel");
-dt.addEventListener("click",()=>{const open=!dp.hidden;dp.hidden=open;dt.textContent=open?"Top DEXs by 24h volume ▾":"Hide DEX rankings ▴";if(!open)loadDexRank();});})();
+dt.addEventListener("click",()=>{const open=!dp.hidden;dp.hidden=open;dt.textContent=open?"🔥 Trending pairs — ranked per chain (24h) ▾":"Hide trending pairs ▴";if(!open)loadTrending();});})();
 
 /* restore saved state */
 try{const f=JSON.parse(localStorage.getItem("s1el_filters")||"{}");if(f.chain){chain=f.chain;setChainChip(f.chain);}if(f.minTvl)$("#minTvl").value=f.minTvl;if(f.minVol)$("#minVol").value=f.minVol;if(f.sort)$("#sort").value=f.sort;}catch(e){}
