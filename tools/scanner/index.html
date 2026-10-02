@@ -144,7 +144,8 @@
     <p><b class="g">IN RANGE</b> = price is inside your band, earning fees. <b class="r">OUT OF RANGE</b> = price left your band, not earning.</p>
     <p><b class="g">🔥 HOLDING · active</b> = in range and APR holding. <b class="r">⚠ CONSIDER EXIT</b> = price left your range, or the 7-day APR is falling — momentum cooling.</p>
     <h3>LINKS</h3>
-    <p><b>details ↗</b> = pool page · <b>chart ↗</b> = live buys/sells on DexScreener · <b>＋ track</b> = watch it in My Pools.</p>
+    <p><b>details ↗</b> = pool page · <b>chart ↗</b> = live chart · <b>pool in ↗</b> = the DEX where you add liquidity (Beefy vaults show <b>zap in ↗</b>) · <b>＋ track</b> = watch it in My Pools.</p>
+    <p>In Trending pairs each row names its <b>venue</b> (the DEX it lives on). <b>Krystal zap ↗</b> opens that exact pool in Krystal's zap-in on EVM chains; if Krystal doesn't list it, the <b>DEX ↗</b> link beside it is the native venue where the pair actually lives.</p>
     <p style="color:var(--muted);margin-top:10px">Not financial advice. Every pool carries risk; you enter on the DEX yourself.</p>
   </div>
 
@@ -246,6 +247,11 @@ function fmtNum(n){n=+n;if(!isFinite(n))return"—";if(n>=1000)return n.toLocale
 function tokensOf(pair){return (pair||"").toUpperCase().split(/[\/\-\s_]+/).filter(Boolean);}
 function isSwapPool(p){const s=(p.symbol||"");if(s.includes('-')||s.includes('/'))return true;return DEXES.some(d=>(p.project||"").toLowerCase().includes(d));}
 const DSCHAIN={Ethereum:"ethereum",BSC:"bsc",Base:"base",Arbitrum:"arbitrum",Polygon:"polygon",Optimism:"optimism",Avalanche:"avalanche",Solana:"solana"};
+const CHAINID={Base:8453,BSC:56,Ethereum:1,Arbitrum:42161,Optimism:10,Polygon:137,Avalanche:43114};
+const GTCHAINID={base:8453,bsc:56,eth:1,arbitrum:42161,optimism:10,polygon_pos:137,avalanche:43114};
+function dexName(id){ if(!id) return "DEX"; return id.replace(/[-_]/g," ").replace(/\bv(\d)\b/gi,"V$1").replace(/\b\w/g,c=>c.toUpperCase()); }
+const DEXLP=[["uniswap","https://app.uniswap.org/positions/create"],["pancake","https://pancakeswap.finance/liquidity"],["aerodrome","https://aerodrome.finance/pools"],["velodrome","https://velodrome.finance/pools"],["sushi","https://www.sushi.com/pool"],["camelot","https://app.camelot.exchange/pools"],["quickswap","https://quickswap.exchange/#/pools"],["thena","https://thena.fi/liquidity"],["ramses","https://www.ramses.exchange/liquidity"],["pharaoh","https://pharaoh.exchange/liquidity"],["raydium","https://raydium.io/liquidity-pools/"],["orca","https://www.orca.so/pools"],["meteora","https://app.meteora.ag/"],["curve","https://curve.finance/"],["balancer","https://balancer.fi/pools"],["baseswap","https://baseswap.fi/liquidity"]];
+function dexLpUrl(id){const s=(id||"").toLowerCase();for(const kv of DEXLP)if(s.includes(kv[0]))return kv[1];return null;}
 function chartUrl(p){
   const slug=DSCHAIN[p.chain];
   const ut=p.underlyingTokens||[];
@@ -339,6 +345,7 @@ function poolRow(p){
   const feeShare=(base!=null&&p.apy>0)?Math.max(0,Math.min(100,base/p.apy*100)):(reward!=null?0:100);
   const dailyFee=base!=null?(base/365).toFixed(2)+"%/d fees":"fee split n/a";
   const vol=p.volumeUsd1d, turn=(vol&&p.tvlUsd)?vol/p.tvlUsd:null;
+  const poolIn=p.beefy?p.link:dexLpUrl(p.project);
   const url=p.link||("https://defillama.com/yields/pool/"+p.pool);
   const where=(p.project||"").replace(/-/g," ")+" · "+p.chain+(p.poolMeta?(" · "+p.poolMeta):"");
   const tr=p.apyPct7D!=null?`<span class="trend ${p.apyPct7D>=0?'up':'down'}">${p.apyPct7D>=0?'▲':'▼'}${Math.abs(p.apyPct7D).toFixed(0)}%</span>`:'';
@@ -357,7 +364,7 @@ function poolRow(p){
     <div class="split"><span class="g">fees ${pct(base)}</span> · <span class="r">rewards ${pct(reward)}</span></div>
     <div class="stats"><span><b>${fmtUsd(p.tvlUsd)}</b> TVL</span><span><b>${vol?fmtUsd(vol):'—'}</b> 24h vol</span><span>${turn?turn.toFixed(1)+'× turn':'— turn'}</span><span>${dailyFee}</span></div>
     <div class="flags">${flags.join("")}</div>
-    <div class="acts"><a href="${url}" target="_blank" rel="noopener">details ↗</a><a href="${chartUrl(p)}" target="_blank" rel="noopener">chart ↗</a><button class="track" data-name="${p.symbol}">＋ track</button></div>
+    <div class="acts"><a href="${url}" target="_blank" rel="noopener">details ↗</a><a href="${chartUrl(p)}" target="_blank" rel="noopener">chart ↗</a>${poolIn?'<a href="'+poolIn+'" target="_blank" rel="noopener">'+(p.beefy?'zap in ↗':'pool in ↗')+'</a>':''}<button class="track" data-name="${p.symbol}">＋ track</button></div>
   </div>`;
 }
 function heroRow(p){
@@ -514,9 +521,17 @@ async function loadTrending(){
       const tx=(a.transactions||{}).h24||{}, txn=(tx.buys||0)+(tx.sells||0);
       const chart="https://dexscreener.com/"+dsslug+"/"+a.address;
       const chgs=chgn==null?"":'<span class="'+(chgn>=0?'g':'r')+'">'+(chgn>=0?'+':'')+chgn.toFixed(1)+'%</span>';
+      const did=(((p.relationships||{}).dex||{}).data||{}).id;
+      const venue=dexName(did);
+      const evm=GTCHAINID[pnet];
+      const zap=evm?("https://cloud-ui.krystal.app/zap/"+evm+"/"+a.address):null;
+      const native=dexLpUrl(did);
+      let links='<a href="'+chart+'" target="_blank" rel="noopener">chart ↗</a>';
+      if(zap) links+=' · <a href="'+zap+'" target="_blank" rel="noopener">Krystal zap ↗</a>';
+      if(native) links+=' · <a href="'+native+'" target="_blank" rel="noopener">'+venue+' ↗</a>';
       return '<p><b>'+(i+1)+'. '+(a.name||'?')+'</b> '+chgs+'<br>'
-        +'<span style="color:var(--muted)">'+fmtUsd(vol)+' vol · '+fmtUsd(liq)+' liq · '+txn.toLocaleString()+' txns</span> '
-        +'<a href="'+chart+'" target="_blank" rel="noopener">chart ↗</a></p>';
+        +'<span style="color:var(--muted)">'+venue+' · '+fmtUsd(vol)+' vol · '+fmtUsd(liq)+' liq · '+txn.toLocaleString()+' txns</span><br>'
+        +links+'</p>';
     }).join("");
     const title='<h3>🔥 TRENDING PAIRS · '+(chain==="ALL"?"ALL CHAINS":chain.toUpperCase())+' · 24H VOLUME</h3>';
     TRENDCACHE[key]=title+(rows||'<div class="state">No pairs returned.</div>')+'<p style="color:var(--muted);margin-top:8px">Ranked by 24h volume, live from GeckoTerminal. Switch the chain chip above to re-rank. Tap a pair for its chart.</p>';
